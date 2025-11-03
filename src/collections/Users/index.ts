@@ -20,6 +20,22 @@ export const Users: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
+      required: true,
+    },
+    {
+      name: 'role',
+      type: 'select',
+      required: true,
+      defaultValue: 'reporter',
+      options: [
+        { label: 'Admin', value: 'admin' },
+        { label: 'Editor', value: 'editor' },
+        { label: 'Reporter', value: 'reporter' },
+        { label: 'Editor de Arte', value: 'art_editor' },
+      ],
+      admin: {
+        description: 'User role determines access and permissions',
+      },
     },
   ],
   timestamps: true,

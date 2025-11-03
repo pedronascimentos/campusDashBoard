@@ -1,0 +1,331 @@
+/**
+ * Custom Admin Panel Styles
+ * 
+ * Color Scheme:
+ * - Sidebar: #6C0318 (deep red)
+ * - Background: #FFFFFF (white)
+ * - Text: #000000 (black)
+ * 
+ * This stylesheet overrides Payload's default theme to create
+ * a custom branded admin interface with consistent colors across
+ * all admin panel components.
+ */
+
+/* ==========================================================================
+   SIDEBAR STYLING
+   ========================================================================== */
+
+/* Main sidebar background */
+:root {
+  --theme-bg: #FFFFFF;
+  --theme-elevation-0: #FFFFFF;
+  --theme-elevation-50: #F5F5F5;
+  --theme-elevation-100: #EEEEEE;
+  --theme-elevation-150: #E0E0E0;
+  --theme-elevation-200: #BDBDBD;
+  --theme-elevation-250: #9E9E9E;
+  --theme-elevation-300: #757575;
+  --theme-elevation-400: #616161;
+  --theme-elevation-500: #424242;
+  --theme-elevation-600: #212121;
+  --theme-elevation-700: #000000;
+  --theme-elevation-800: #000000;
+  --theme-elevation-900: #000000;
+  --theme-elevation-1000: #000000;
+  
+  --theme-text: #000000;
+  --theme-success-50: #E8F5E9;
+  --theme-success-100: #C8E6C9;
+  --theme-success-150: #A5D6A7;
+  --theme-success-200: #81C784;
+  --theme-success-250: #66BB6A;
+  --theme-success-300: #4CAF50;
+  --theme-success-350: #43A047;
+  --theme-success-400: #388E3C;
+  --theme-success-450: #2E7D32;
+  --theme-success-500: #1B5E20;
+  --theme-success-550: #1B5E20;
+  --theme-success-600: #1B5E20;
+  --theme-success-650: #1B5E20;
+  --theme-success-700: #1B5E20;
+  --theme-success-750: #1B5E20;
+  --theme-success-800: #1B5E20;
+  
+  --theme-error-50: #FFEBEE;
+  --theme-error-100: #FFCDD2;
+  --theme-error-150: #EF9A9A;
+  --theme-error-200: #E57373;
+  --theme-error-250: #EF5350;
+  --theme-error-300: #F44336;
+  --theme-error-350: #E53935;
+  --theme-error-400: #D32F2F;
+  --theme-error-450: #C62828;
+  --theme-error-500: #B71C1C;
+  --theme-error-550: #B71C1C;
+  --theme-error-600: #B71C1C;
+  --theme-error-650: #B71C1C;
+  --theme-error-700: #B71C1C;
+  --theme-error-750: #B71C1C;
+  --theme-error-800: #B71C1C;
+  
+  --theme-warning-50: #FFF3E0;
+  --theme-warning-100: #FFE0B2;
+  --theme-warning-150: #FFCC80;
+  --theme-warning-200: #FFB74D;
+  --theme-warning-250: #FFA726;
+  --theme-warning-300: #FF9800;
+  --theme-warning-350: #FB8C00;
+  --theme-warning-400: #F57C00;
+  --theme-warning-450: #EF6C00;
+  --theme-warning-500: #E65100;
+  --theme-warning-550: #E65100;
+  --theme-warning-600: #E65100;
+  --theme-warning-650: #E65100;
+  --theme-warning-700: #E65100;
+  --theme-warning-750: #E65100;
+  --theme-warning-800: #E65100;
+}
+
+/* Sidebar container */
+.template-default .nav {
+  background-color: #6C0318 !important;
+}
+
+/* Sidebar links and text */
+.template-default .nav a,
+.template-default .nav button,
+.template-default .nav .nav-group__label {
+  color: #FFFFFF !important;
+}
+
+/* Sidebar hover states */
+.template-default .nav a:hover,
+.template-default .nav button:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Active sidebar item */
+.template-default .nav a.active,
+.template-default .nav button.active {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  font-weight: 600;
+}
+
+/* Sidebar icons */
+.template-default .nav svg {
+  color: #FFFFFF !important;
+}
+
+/* Sidebar logo area */
+.template-default .nav .nav-header {
+  background-color: #6C0318 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   HEADER STYLING
+   ========================================================================== */
+
+/* Main header background */
+.template-default .app-header {
+  background-color: #FFFFFF !important;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+/* Header text */
+.template-default .app-header *:not(svg) {
+  color: #000000 !important;
+}
+
+/* Header icons */
+.template-default .app-header svg {
+  color: #000000 !important;
+}
+
+/* ==========================================================================
+   MAIN CONTENT AREA
+   ========================================================================== */
+
+/* Main content background */
+.template-default .template__wrap,
+.template-default .doc-template,
+.template-default .render-fields {
+  background-color: #FFFFFF !important;
+}
+
+/* Content text */
+.template-default .doc-template *:not(svg),
+.template-default .render-fields * {
+  color: #000000;
+}
+
+/* Field labels */
+.template-default .field-type label {
+  color: #000000 !important;
+  font-weight: 500;
+}
+
+/* Input backgrounds */
+.template-default input,
+.template-default textarea,
+.template-default select {
+  background-color: #FFFFFF !important;
+  border-color: #E0E0E0 !important;
+  color: #000000 !important;
+}
+
+/* Input focus states */
+.template-default input:focus,
+.template-default textarea:focus,
+.template-default select:focus {
+  border-color: #6C0318 !important;
+  box-shadow: 0 0 0 2px rgba(108, 3, 24, 0.1) !important;
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+
+/* Primary button */
+.template-default .btn--style-primary,
+.template-default button[type="submit"] {
+  background-color: #6C0318 !important;
+  border-color: #6C0318 !important;
+  color: #FFFFFF !important;
+}
+
+.template-default .btn--style-primary:hover,
+.template-default button[type="submit"]:hover {
+  background-color: #8B1538 !important;
+  border-color: #8B1538 !important;
+}
+
+/* Secondary button */
+.template-default .btn--style-secondary {
+  background-color: #FFFFFF !important;
+  border-color: #6C0318 !important;
+  color: #6C0318 !important;
+}
+
+.template-default .btn--style-secondary:hover {
+  background-color: #F5F5F5 !important;
+}
+
+/* ==========================================================================
+   TABLES & LISTS
+   ========================================================================== */
+
+/* Table headers */
+.template-default .collection-list table thead {
+  background-color: #F5F5F5 !important;
+}
+
+.template-default .collection-list table th {
+  color: #000000 !important;
+  font-weight: 600;
+}
+
+/* Table rows */
+.template-default .collection-list table tbody tr {
+  border-bottom: 1px solid #E0E0E0 !important;
+}
+
+.template-default .collection-list table tbody tr:hover {
+  background-color: #F5F5F5 !important;
+}
+
+/* ==========================================================================
+   CARDS & PANELS
+   ========================================================================== */
+
+/* Card backgrounds */
+.template-default .card,
+.template-default .panel {
+  background-color: #FFFFFF !important;
+  border: 1px solid #E0E0E0 !important;
+}
+
+/* ==========================================================================
+   RICH TEXT EDITOR (SLATE)
+   ========================================================================== */
+
+/* Slate editor container */
+.template-default .slate-editor {
+  background-color: #FFFFFF !important;
+  border: 1px solid #E0E0E0 !important;
+}
+
+/* Slate toolbar */
+.template-default .slate-toolbar {
+  background-color: #F5F5F5 !important;
+  border-bottom: 1px solid #E0E0E0 !important;
+}
+
+/* Slate toolbar buttons */
+.template-default .slate-toolbar button {
+  color: #000000 !important;
+}
+
+.template-default .slate-toolbar button:hover {
+  background-color: #E0E0E0 !important;
+}
+
+.template-default .slate-toolbar button.active {
+  background-color: #6C0318 !important;
+  color: #FFFFFF !important;
+}
+
+/* ==========================================================================
+   TABS
+   ========================================================================== */
+
+/* Tab navigation */
+.template-default .tabs-wrapper .tabs-nav {
+  border-bottom: 2px solid #E0E0E0 !important;
+}
+
+/* Tab buttons */
+.template-default .tabs-wrapper .tabs-nav button {
+  color: #000000 !important;
+}
+
+.template-default .tabs-wrapper .tabs-nav button:hover {
+  color: #6C0318 !important;
+}
+
+.template-default .tabs-wrapper .tabs-nav button.active {
+  color: #6C0318 !important;
+  border-bottom: 2px solid #6C0318 !important;
+}
+
+/* ==========================================================================
+   TOOLTIPS & POPOVERS
+   ========================================================================== */
+
+.template-default .tooltip,
+.template-default .popup {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+/* ==========================================================================
+   SCROLLBARS
+   ========================================================================== */
+
+.template-default ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.template-default ::-webkit-scrollbar-track {
+  background-color: #F5F5F5;
+}
+
+.template-default ::-webkit-scrollbar-thumb {
+  background-color: #BDBDBD;
+  border-radius: 5px;
+}
+
+.template-default ::-webkit-scrollbar-thumb:hover {
+  background-color: #9E9E9E;
+}
