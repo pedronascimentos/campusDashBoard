@@ -6,7 +6,6 @@ import { notFound } from 'next/navigation'
 import { ArticlePreviewClient } from '@/components/ArticlePreviewClient'
 
 export default async function PreviewPage({ params }: { params: { slug: string } }) {
-  // CORREÇÃO: 'params' é um objeto, não uma Promise.
   const { slug } = params 
 
   const payload = await getPayload({ config: configPromise })
