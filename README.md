@@ -1,12 +1,14 @@
-# Payload Website Template
+# Campus Multiplataforma CMS
 
-This is the official [Payload Website Template](https://github.com/payloadcms/payload/blob/main/templates/website). Use it to power websites, blogs, or portfolios from small to enterprise. This repo includes a fully-working backend, enterprise-grade admin panel, and a beautifully designed, production-ready website.
+This is a PayloadCMS-based content management system for Campus Multiplataforma. Built with PayloadCMS, Next.js App Router, and PostgreSQL.
 
-This template is right for you if you are working on:
+This template is designed for:
 
-- A personal or enterprise-grade website, blog, or portfolio
-- A content publishing platform with a fully featured publication workflow
-- Exploring the capabilities of Payload
+- Multi-platform content publishing
+- Article and media management
+- Theme customization
+- Analytics tracking
+- Content organization with categories
 
 Core features:
 

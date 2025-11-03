@@ -29,8 +29,12 @@ export default buildConfig({
     user: 'users',
     meta: {
       titleSuffix: '- Campus Multiplataforma',
-      favicon: '/favicon.png',
-      ogImage: '/campus-logo.png',
+    },
+    components: {
+      graphics: {
+        Logo: '../../../components/Logo/PayloadLogo#PayloadLogo',
+        Icon: '../../../components/Logo/PayloadIcon#PayloadIcon',
+      },
     },
     livePreview: {
       breakpoints: [

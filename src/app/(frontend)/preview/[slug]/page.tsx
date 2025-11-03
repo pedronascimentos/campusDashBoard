@@ -1,18 +1,14 @@
-import { getPayload } from 'payload' 
+// src/app/(frontend)/preview/[slug]/page.tsx
+
+import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { notFound } from 'next/navigation'
 import { ArticlePreviewClient } from '@/components/ArticlePreviewClient'
 
-/**
- * Article Preview Page (Server Component)
- * 
- * This server component fetches the article data and passes it to
- * the client component which handles auto-refresh and rendering.
- * 
- * The preview updates automatically every 2 seconds while editing.
- */
 export default async function PreviewPage({ params }: { params: { slug: string } }) {
-  const { slug } = await params
+  // CORREÇÃO: 'params' é um objeto, não uma Promise.
+  const { slug } = params 
+
   const payload = await getPayload({ config: configPromise })
 
   const articles = await payload.find({

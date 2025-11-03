@@ -122,6 +122,20 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Custom logo styling in admin panel */
+.template-default .nav .nav-header img {
+  max-width: 150px !important;
+  height: auto !important;
+}
+
+/* Logo and icon wrapper */
+.template-default .logo,
+.template-default .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* ==========================================================================
    HEADER STYLING
    ========================================================================== */
