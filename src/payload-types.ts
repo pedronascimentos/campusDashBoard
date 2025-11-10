@@ -708,7 +708,9 @@ export interface Reel {
   id: number;
   title: string;
   url: string;
-  platform: 'tiktok' | 'reels';
+  platform: 'tiktok' | 'reels' | 'youtube';
+  embedHtml?: string | null;
+  thumbnailUrl?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1116,6 +1118,8 @@ export interface ReelsSelect<T extends boolean = true> {
   title?: T;
   url?: T;
   platform?: T;
+  embedHtml?: T;
+  thumbnailUrl?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1168,7 +1172,12 @@ export interface AppLayout {
   sections?:
     | (
         | {
-            article: number | Article;
+            featureType?: ('article' | 'video') | null;
+            article?: (number | null) | Article;
+            videoFeature?: {
+              videoUrl: string;
+              isLive?: boolean | null;
+            };
             isHidden?: boolean | null;
             id?: string | null;
             blockName?: string | null;
@@ -1205,7 +1214,14 @@ export interface AppLayoutSelect<T extends boolean = true> {
         'featured-article'?:
           | T
           | {
+              featureType?: T;
               article?: T;
+              videoFeature?:
+                | T
+                | {
+                    videoUrl?: T;
+                    isLive?: T;
+                  };
               isHidden?: T;
               id?: T;
               blockName?: T;

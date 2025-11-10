@@ -23,9 +23,14 @@ async function getDraftArticle(slug: string) {
   }
 }
 
-// Este é o Server Component que carrega os dados iniciais
-export default async function ArticlePreviewPage({ params }: { params: { slug: string } }) {
-  const { slug } = params
+/**
+ * CORREÇÃO:
+ * A tipagem de 'params' foi atualizada de '{ slug: string }'
+ * para 'Promise<{ slug: string }>' para ser compatível com o Next.js 15.
+ */
+export default async function ArticlePreviewPage({ params }: { params: Promise<{ slug: string }> }) {
+  // CORREÇÃO: Adicionado 'await' para resolver a Promise de params
+  const { slug } = await params
   const article = await getDraftArticle(slug)
 
   if (!article) {

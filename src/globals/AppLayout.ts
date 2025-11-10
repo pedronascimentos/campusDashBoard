@@ -1,47 +1,90 @@
-// src/globals/AppLayout.ts
-
-// 1. Importe 'Block' e 'GlobalConfig' de 'payload/types'
 import type { GlobalConfig, Block } from 'payload'
 import { authenticated } from '../access/authenticated'
 
-
-// Definições dos Blocos de Seção
-const FeaturedArticleBlock: Block = {
-  slug: 'featured-article',
-  // 3. 'label' deve ser 'labels' (plural) e um objeto
+// Bloco "Featured" ATUALIZADO
+const FeaturedBlock: Block = {
+  slug: 'featured-article', // O slug permanece o mesmo
   labels: {
-    singular: 'Destaque',
-    plural: 'Artigos em Destaque',
+    singular: 'Destaque (Artigo ou Vídeo)',
+    plural: 'Destaques (Artigo ou Vídeo)',
   },
   fields: [
     {
+      name: 'featureType',
+      label: 'Tipo de Destaque',
+      type: 'radio',
+      options: [
+        {
+          label: 'Artigo',
+          value: 'article',
+        },
+        {
+          label: 'Vídeo (YouTube)',
+          value: 'video',
+        },
+      ],
+      defaultValue: 'article',
+      admin: {
+        layout: 'horizontal',
+      }
+    },
+    
+    // --- Campo Condicional para Artigo ---
+    {
       name: 'article',
+      label: 'Artigo em Destaque',
       type: 'relationship',
       relationTo: 'articles',
       required: true,
-      hasMany: false,
-      label: 'Artigo Selecionado',
+      admin: {
+        condition: (_, siblingData) => siblingData.featureType === 'article',
+      },
+    },
+
+    // --- Campos Condicionais para Vídeo ---
+    {
+      name: 'videoFeature',
+      label: 'Destaque de Vídeo',
+      type: 'group',
+      admin: {
+        condition: (_, siblingData) => siblingData.featureType === 'video',
+      },
+      fields: [
+        {
+          name: 'videoUrl',
+          label: 'URL do Vídeo (YouTube)',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'isLive',
+          label: 'É uma transmissão ao vivo?',
+          type: 'checkbox',
+          defaultValue: false,
+        },
+      ]
     },
     {
       name: 'isHidden',
+      label: 'Ocultar Seção',
       type: 'checkbox',
-      label: 'Esconder esta seção?',
       defaultValue: false,
     },
   ],
 }
 
+// Bloco "Category" (Corrigido)
 const CategorySectionBlock: Block = {
   slug: 'category-section',
-  labels: { // 3. Correção
-    singular: 'Categorias',
+  labels: { 
+    singular: 'Seção de Categoria',
     plural: 'Seções de Categoria',
   },
   fields: [
     {
       name: 'category',
       type: 'relationship',
-      relationTo: 'categories', // 4. Correção
+      relationTo: 'categories',
       required: true,
       hasMany: false,
       label: 'Categoria Selecionada',
@@ -55,11 +98,12 @@ const CategorySectionBlock: Block = {
   ],
 }
 
+// Bloco "Reels" (Corrigido)
 const ReelsSectionBlock: Block = {
   slug: 'reels-section',
-  labels: { // 3. Correção
-    singular: 'Videos Curtos',
-    plural: 'Seções de Vídeos',
+  labels: {
+    singular: 'Seção de Vídeos Curtos',
+    plural: 'Seções de Vídeos Curtos',
   },
   fields: [
     {
@@ -72,9 +116,8 @@ const ReelsSectionBlock: Block = {
     {
       name: 'reels',
       type: 'relationship',
-      relationTo: 'reels', // 4. Correção
+      relationTo: 'reels',
       hasMany: true,
-      isSortable: true,
       label: 'Vídeos',
     },
     {
@@ -100,12 +143,11 @@ export const AppLayout: GlobalConfig = {
       type: 'blocks',
       label: 'Seções do Aplicativo',
       minRows: 1,
-      // 5. 'isSortable' para 'blocks' deve estar DENTRO de 'admin'
       admin: {
         isSortable: true,
       },
       blocks: [
-        FeaturedArticleBlock,
+        FeaturedBlock, // Atualizado
         CategorySectionBlock,
         ReelsSectionBlock,
       ],

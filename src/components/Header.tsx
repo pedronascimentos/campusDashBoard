@@ -1,23 +1,20 @@
-// src/components/Header.tsx
 "use client";
 
 import React, { useState, useEffect } from 'react';
+// 1. Importar o Link
+import Link from 'next/link';
 
 /**
- * 1. Componente ÚNICO que substitui Logo e IconLogo.
+ * Componente ÚNICO que substitui Logo e IconLogo.
  * Ele recebe 'isScrolled' como prop e muda seu próprio estilo.
  */
 function HeaderLogo({ isScrolled }: { isScrolled: boolean }) {
   const [hasError, setHasError] = useState(false);
 
-  // Define os valores com base no estado 'isScrolled'
-  const logoSrc = isScrolled ? "/campus-logo.png" : "/campus-logo.png"; // Assumindo que você tem um ícone
+  const logoSrc = isScrolled ? "/campus-logo.png" : "/campus-logo.png";
   const altText = "Campus Multiplataforma";
   const fallbackText = isScrolled ? 'C' : 'CAMPUS';
-
-  // Define a altura-alvo
   const targetHeight = isScrolled ? '22px' : '28px';
-  // Define a duração da transição (mais lenta)
   const transitionDuration = '0.2s';
 
   // Fallback em caso de erro
@@ -28,11 +25,9 @@ function HeaderLogo({ isScrolled }: { isScrolled: boolean }) {
         margin: '0',
         fontFamily: '"Reith Serif", Georgia, serif',
         color: 'white',
-        // O fallback deve ter a mesma altura da imagem para evitar "pulos"
         height: targetHeight,
         display: 'flex',
         alignItems: 'center',
-        // Aplica a transição ao fallback também
         transition: `height ${transitionDuration} ease-in-out`,
       }}>
         {fallbackText}
@@ -46,11 +41,9 @@ function HeaderLogo({ isScrolled }: { isScrolled: boolean }) {
       src={logoSrc}
       alt={altText}
       style={{
-        // Define a altura com base na prop
         height: targetHeight,
         display: 'block',
         margin: '0 auto',
-        // 2. A transição agora funciona, pois o <img> é persistente
         transition: `height ${transitionDuration} ease-in-out`,
       }}
       onError={() => setHasError(true)}
@@ -58,19 +51,15 @@ function HeaderLogo({ isScrolled }: { isScrolled: boolean }) {
   );
 }
 
-// (Os componentes Logo() e IconLogo() antigos foram removidos)
-
-
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  // Define a duração da transição em um só lugar
   const transitionDuration = '0.2s';
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY >= 10);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
@@ -82,7 +71,6 @@ export function Header() {
       position: 'sticky',
       top: 0,
       zIndex: 1000,
-      // 3. Aplica a transição mais lenta ao padding do header
       transition: `padding ${transitionDuration} ease-in-out`,
     }}>
       <div className="bbc-container" style={{
@@ -90,7 +78,6 @@ export function Header() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        // 4. Aplica a transição mais lenta ao padding do container
         transition: `padding ${transitionDuration} ease-in-out`,
       }}>
 
@@ -104,21 +91,22 @@ export function Header() {
           padding: '8px',
           width: '40px',
         }}>
-
+          ☰
         </button>
 
-        {/* 5. Chama o novo componente único */}
-        <a href="/" style={{ textDecoration: 'none', color: 'white' }}>
+        {/* 2. CORREÇÃO: Trocar <a> por <Link> para corrigir erro de build */}
+        <Link href="/" style={{ textDecoration: 'none', color: 'white' }}>
           <HeaderLogo isScrolled={isScrolled} />
-        </a>
+        </Link>
 
-        {/* Ícone 2: Busca (Direita) */}
+        {/* Ícone 2: Busca (Direita) - Ícone transparente para manter o layout */}
         <button style={{
           background: 'transparent',
           border: 'none',
-          color: 'transparent',
+          color: 'transparent', // Escondido
           fontSize: '24px',
-          cursor: 'pointer',
+          cursor: 'default', // Não clicável
+          pointerEvents: 'none', // Ignora o mouse
           padding: '8px',
           width: '40px',
         }}>
