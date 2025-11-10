@@ -46,11 +46,10 @@ import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8c
 import { LexicalDiffComponent as LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { InlineToolbarFeatureClient as InlineToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { FixedToolbarFeatureClient as FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
-import { FolderTableCell as FolderTableCell_ab83ff7e88da8d3530831f296ec4756a } from '@payloadcms/ui/rsc'
-import { FolderField as FolderField_ab83ff7e88da8d3530831f296ec4756a } from '@payloadcms/ui/rsc'
-import { FolderTypeField as FolderTypeField_3817bf644402e67bfe6577f60ef982de } from '@payloadcms/ui'
-import { PayloadLogo } from '../../../components/Logo/PayloadLogo'
-import { PayloadIcon } from '../../../components/Logo/PayloadIcon'
+import { PayloadIcon as PayloadIcon_4f110d8d8b0d4067587272a7edc4af30 } from '../../../components/Logo/PayloadIcon'
+import { PayloadLogo as PayloadLogo_aaddc7b125e1c153f48bfc2472436933 } from '../../../components/Logo/PayloadLogo'
+import { SidebarLogo as SidebarLogo_custom } from '../../../components/Logo/SidebarLogo'
+import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
 
 export const importMap = {
   "@payloadcms/richtext-slate/rsc#RscEntrySlateCell": RscEntrySlateCell_0e78253914a550fdacd75626f1dabe17,
@@ -101,9 +100,8 @@ export const importMap = {
   "@payloadcms/richtext-lexical/rsc#LexicalDiffComponent": LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/client#InlineToolbarFeatureClient": InlineToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#FixedToolbarFeatureClient": FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  "@payloadcms/ui/rsc#FolderTableCell": FolderTableCell_ab83ff7e88da8d3530831f296ec4756a,
-  "@payloadcms/ui/rsc#FolderField": FolderField_ab83ff7e88da8d3530831f296ec4756a,
-  "@payloadcms/ui#FolderTypeField": FolderTypeField_3817bf644402e67bfe6577f60ef982de,
-  "../../../components/Logo/PayloadLogo#PayloadLogo": PayloadLogo,
-  "../../../components/Logo/PayloadIcon#PayloadIcon": PayloadIcon
+  "../../../components/Logo/PayloadIcon#PayloadIcon": PayloadIcon_4f110d8d8b0d4067587272a7edc4af30,
+  "../../../components/Logo/PayloadLogo#PayloadLogo": PayloadLogo_aaddc7b125e1c153f48bfc2472436933,
+  "../../../components/Logo/SidebarLogo#SidebarLogo": SidebarLogo_custom,
+  "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24
 }

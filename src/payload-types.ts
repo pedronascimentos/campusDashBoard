@@ -75,16 +75,11 @@ export interface Config {
     analytics: Analytics;
     reels: Reel;
     'payload-kv': PayloadKv;
-    'payload-folders': FolderInterface;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {
-    'payload-folders': {
-      documentsAndFolders: 'payload-folders' | 'media';
-    };
-  };
+  collectionsJoins: {};
   collectionsSelect: {
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
@@ -94,7 +89,6 @@ export interface Config {
     analytics: AnalyticsSelect<false> | AnalyticsSelect<true>;
     reels: ReelsSelect<false> | ReelsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
-    'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -197,7 +191,7 @@ export interface Article {
   _status?: ('draft' | 'published') | null;
 }
 /**
- * Manage application themes, colors, typography, and visual styling
+ * Gerencie temas, cores, tipografia e estilos visuais da aplicação
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "themes".
@@ -205,142 +199,142 @@ export interface Article {
 export interface Theme {
   id: number;
   /**
-   * Theme name (e.g., "Campus Default", "Dark Mode", "High Contrast")
+   * Nome do tema (ex: "Campus Padrão", "Modo Escuro", "Alto Contraste")
    */
   name: string;
   /**
-   * URL-friendly identifier for API access
+   * Identificador amigável para URL (API)
    */
   slug: string;
   /**
-   * Description of this theme and when to use it
+   * Descrição deste tema e quando usá-lo
    */
   description?: string | null;
   /**
-   * Enable/disable this theme
+   * Ativar/desativar este tema
    */
   isActive?: boolean | null;
   /**
-   * Set as default theme (only one should be default)
+   * Definir como tema padrão (apenas um deve ser padrão)
    */
   isDefault?: boolean | null;
   colors: {
     primary: {
       /**
-       * Primary brand color (hex format: #1976d2)
+       * Cor principal da marca (formato hex: #1976d2)
        */
       main: string;
       /**
-       * Lighter variant (auto-generated if empty)
+       * Variante mais clara (auto-gerada se vazia)
        */
       light?: string | null;
       /**
-       * Darker variant (auto-generated if empty)
+       * Variante mais escura (auto-gerada se vazia)
        */
       dark?: string | null;
       /**
-       * Text color on primary background
+       * Cor do texto sobre fundo primário
        */
       contrast?: string | null;
     };
     secondary: {
       /**
-       * Secondary brand color
+       * Cor secundária da marca
        */
       main: string;
       /**
-       * Lighter variant
+       * Variante mais clara
        */
       light?: string | null;
       /**
-       * Darker variant
+       * Variante mais escura
        */
       dark?: string | null;
       /**
-       * Text color on secondary background
+       * Cor do texto sobre fundo secundário
        */
       contrast?: string | null;
     };
     accent?: {
       /**
-       * Accent color for highlights and CTAs
+       * Cor de destaque para ênfases e CTAs
        */
       main?: string | null;
       contrast?: string | null;
     };
     background: {
       /**
-       * Default background color
+       * Cor de fundo padrão
        */
       default: string;
       /**
-       * Background for cards and elevated surfaces
+       * Fundo para cards e superfícies elevadas
        */
       paper?: string | null;
       /**
-       * Background for headers, toolbars
+       * Fundo para cabeçalhos, barras de ferramentas
        */
       elevated?: string | null;
     };
     text: {
       /**
-       * Primary text color
+       * Cor de texto principal
        */
       primary: string;
       /**
-       * Secondary/muted text color
+       * Cor de texto secundária/suave
        */
       secondary?: string | null;
       /**
-       * Disabled text color
+       * Cor de texto desabilitado
        */
       disabled?: string | null;
       /**
-       * Hint/placeholder text color
+       * Cor de texto para dicas/placeholders
        */
       hint?: string | null;
     };
     semantic?: {
       /**
-       * Success state color
+       * Cor de estado de sucesso
        */
       success?: string | null;
       /**
-       * Error state color
+       * Cor de estado de erro
        */
       error?: string | null;
       /**
-       * Warning state color
+       * Cor de estado de aviso
        */
       warning?: string | null;
       /**
-       * Info state color
+       * Cor de estado de informação
        */
       info?: string | null;
     };
     /**
-     * Border and divider color
+     * Cor de borda e divisor
      */
     divider?: string | null;
   };
   typography?: {
     fontFamily?: {
       /**
-       * Primary font family for body text
+       * Família de fonte principal para corpo de texto
        */
       primary?: string | null;
       /**
-       * Font family for headings
+       * Família de fonte para cabeçalhos
        */
       heading?: string | null;
       /**
-       * Monospace font for code blocks
+       * Fonte monoespaçada para blocos de código
        */
       monospace?: string | null;
     };
     fontSize?: {
       /**
-       * Heading 1 size
+       * Tamanho do Cabeçalho 1
        */
       h1?: number | null;
       h2?: number | null;
@@ -349,15 +343,15 @@ export interface Theme {
       h5?: number | null;
       h6?: number | null;
       /**
-       * Base body text size
+       * Tamanho base do corpo de texto
        */
       body?: number | null;
       /**
-       * Small text size
+       * Tamanho de texto pequeno
        */
       small?: number | null;
       /**
-       * Caption and helper text
+       * Legenda e texto de ajuda
        */
       caption?: number | null;
     };
@@ -370,45 +364,45 @@ export interface Theme {
     };
     lineHeight?: {
       /**
-       * Tight line height for headings
+       * Altura de linha justa para cabeçalhos
        */
       tight?: number | null;
       /**
-       * Normal line height for body text
+       * Altura de linha normal para corpo de texto
        */
       normal?: number | null;
       /**
-       * Relaxed line height for readability
+       * Altura de linha relaxada para legibilidade
        */
       relaxed?: number | null;
     };
   };
   /**
-   * Define spacing units for consistent margins and padding
+   * Defina unidades de espaçamento para margens e preenchimentos consistentes
    */
   spacing?: {
     /**
-     * Extra small (4px)
+     * Extra pequeno (4px)
      */
     xs?: number | null;
     /**
-     * Small (8px)
+     * Pequeno (8px)
      */
     sm?: number | null;
     /**
-     * Medium (16px)
+     * Médio (16px)
      */
     md?: number | null;
     /**
-     * Large (24px)
+     * Grande (24px)
      */
     lg?: number | null;
     /**
-     * Extra large (32px)
+     * Extra grande (32px)
      */
     xl?: number | null;
     /**
-     * 2X large (48px)
+     * 2X grande (48px)
      */
     xxl?: number | null;
   };
@@ -419,40 +413,40 @@ export interface Theme {
     lg?: number | null;
     xl?: number | null;
     /**
-     * Fully rounded (pill shape)
+     * Totalmente arredondado (forma de pílula)
      */
     full?: number | null;
   };
   shadows?: {
     /**
-     * Small shadow (subtle elevation)
+     * Sombra pequena (elevação sutil)
      */
     sm?: string | null;
     /**
-     * Medium shadow (cards)
+     * Sombra média (cards)
      */
     md?: string | null;
     /**
-     * Large shadow (modals, popovers)
+     * Sombra grande (modais, popovers)
      */
     lg?: string | null;
     /**
-     * Extra large shadow (overlays)
+     * Sombra extra grande (sobreposições)
      */
     xl?: string | null;
   };
   components?: {
     button?: {
       /**
-       * Button border radius
+       * Raio da borda do botão
        */
       borderRadius?: number | null;
       /**
-       * Horizontal padding
+       * Preenchimento horizontal
        */
       paddingX?: number | null;
       /**
-       * Vertical padding
+       * Preenchimento vertical
        */
       paddingY?: number | null;
     };
@@ -468,20 +462,20 @@ export interface Theme {
     };
   };
   /**
-   * Additional custom CSS to inject (advanced users only)
+   * CSS personalizado adicional para injetar (apenas usuários avançados)
    */
   customCSS?: string | null;
   metadata?: {
     /**
-     * Theme version for tracking changes
+     * Versão do tema para rastrear mudanças
      */
     version?: string | null;
     /**
-     * Theme author/creator
+     * Autor/criador do tema
      */
     author?: string | null;
     /**
-     * Comma-separated tags (e.g., "dark, minimal, corporate")
+     * Tags separadas por vírgula (ex: "escuro, minimalista, corporativo")
      */
     tags?: string | null;
   };
@@ -495,22 +489,12 @@ export interface Theme {
 export interface Media {
   id: number;
   alt?: string | null;
-  caption?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
+  caption?:
+    | {
         [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  folder?: (number | null) | FolderInterface;
+      }[]
+    | null;
+  prefix?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -522,90 +506,6 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
-  sizes?: {
-    thumbnail?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    square?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    small?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    medium?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    large?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    xlarge?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    og?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-  };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "payload-folders".
- */
-export interface FolderInterface {
-  id: number;
-  name: string;
-  folder?: (number | null) | FolderInterface;
-  documentsAndFolders?: {
-    docs?: (
-      | {
-          relationTo?: 'payload-folders';
-          value: number | FolderInterface;
-        }
-      | {
-          relationTo?: 'media';
-          value: number | Media;
-        }
-    )[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  folderType?: 'media'[] | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -643,19 +543,19 @@ export interface User {
 export interface Category {
   id: number;
   /**
-   * Category name (e.g., "Sports", "Technology", "Culture")
+   * Nome da categoria (ex: "Esportes", "Tecnologia", "Cultura")
    */
   name: string;
   /**
-   * URL-friendly identifier
+   * Identificador amigável para URL
    */
   slug: string;
   /**
-   * Color for visual organization
+   * Cor para organização visual
    */
   color?: ('red' | 'orange' | 'yellow' | 'green' | 'blue' | 'purple' | 'brown' | 'gray') | null;
   /**
-   * Optional description (max 200 characters)
+   * Descrição opcional (máx 200 caracteres)
    */
   description?: string | null;
   /**
@@ -666,7 +566,7 @@ export interface Category {
   createdAt: string;
 }
 /**
- * Analytics and tracking data for content performance and user engagement
+ * Dados de análise e rastreamento de desempenho de conteúdo e engajamento de usuários
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "analytics".
@@ -674,58 +574,58 @@ export interface Category {
 export interface Analytics {
   id: number;
   /**
-   * Type of content being tracked
+   * Tipo de conteúdo que está sendo rastreado
    */
   contentType: 'article' | 'post' | 'media' | 'page';
   /**
-   * ID of the content item (article, post, etc.)
+   * ID do item de conteúdo (artigo, postagem, etc.)
    */
   contentId: string;
   /**
-   * Title of the content for easier reference
+   * Título do conteúdo para referência
    */
   contentTitle?: string | null;
   /**
-   * Type of analytics event
+   * Tipo de evento analítico registrado
    */
   eventType: 'page_view' | 'content_read' | 'video_play' | 'video_complete' | 'share' | 'like' | 'comment' | 'download';
   /**
-   * Unique user identifier (anonymous or authenticated)
+   * Identificador único do usuário (anônimo ou autenticado)
    */
   userId?: string | null;
   /**
-   * Session identifier for grouping user activity
+   * Identificador da sessão para agrupar atividades do usuário
    */
   sessionId?: string | null;
   /**
-   * Whether the user was logged in
+   * Indica se o usuário estava logado
    */
   isAuthenticated?: boolean | null;
   deviceInfo?: {
     deviceType?: ('desktop' | 'mobile' | 'tablet' | 'other') | null;
     /**
-     * Operating system (e.g., iOS, Android, Windows)
+     * Sistema operacional (ex: iOS, Android, Windows)
      */
     os?: string | null;
     osVersion?: string | null;
     /**
-     * Browser name (e.g., Chrome, Safari, Firefox)
+     * Nome do navegador (ex: Chrome, Safari, Firefox)
      */
     browser?: string | null;
     browserVersion?: string | null;
     /**
-     * Screen resolution (e.g., 1920x1080)
+     * Resolução da tela (ex: 1920x1080)
      */
     screenResolution?: string | null;
   };
   geoLocation?: {
     country?: string | null;
     /**
-     * ISO country code (e.g., US, BR, UK)
+     * Código ISO do país (ex: BR, US, UK)
      */
     countryCode?: string | null;
     /**
-     * State or region
+     * Estado ou região
      */
     region?: string | null;
     city?: string | null;
@@ -734,38 +634,38 @@ export interface Analytics {
   };
   engagementMetrics?: {
     /**
-     * Time spent on content in seconds
+     * Tempo gasto no conteúdo (em segundos)
      */
     timeSpent?: number | null;
     /**
-     * Percentage of content scrolled (0-100)
+     * Percentual de rolagem do conteúdo (0–100)
      */
     scrollDepth?: number | null;
     /**
-     * Number of clicks/interactions
+     * Número de cliques/interações
      */
     clickCount?: number | null;
     /**
-     * User left without interaction
+     * Usuário saiu sem interação
      */
     bounced?: boolean | null;
   };
   trafficSource?: {
     /**
-     * Referring URL
+     * URL de referência
      */
     referrer?: string | null;
     source?: ('direct' | 'search' | 'social' | 'email' | 'referral' | 'other') | null;
     /**
-     * Marketing medium (e.g., cpc, organic, email)
+     * Meio de marketing (ex: cpc, orgânico, e-mail)
      */
     medium?: string | null;
     /**
-     * Campaign name for tracking
+     * Nome da campanha para rastreamento
      */
     campaign?: string | null;
     /**
-     * Full UTM parameters as JSON
+     * Parâmetros UTM completos em formato JSON
      */
     utmParams?:
       | {
@@ -778,15 +678,15 @@ export interface Analytics {
       | null;
   };
   /**
-   * User IP address (anonymized for privacy)
+   * Endereço IP do usuário (anonimizado por privacidade)
    */
   ipAddress?: string | null;
   /**
-   * Full user agent string
+   * String completa do agente do usuário
    */
   userAgent?: string | null;
   /**
-   * Additional custom metadata as JSON
+   * Metadados adicionais personalizados em formato JSON
    */
   metadata?:
     | {
@@ -867,10 +767,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'payload-kv';
         value: number | PayloadKv;
-      } | null)
-    | ({
-        relationTo: 'payload-folders';
-        value: number | FolderInterface;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -956,7 +852,7 @@ export interface CategoriesSelect<T extends boolean = true> {
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
-  folder?: T;
+  prefix?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -968,80 +864,6 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
-  sizes?:
-    | T
-    | {
-        thumbnail?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        square?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        small?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        medium?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        large?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        xlarge?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        og?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1304,18 +1126,6 @@ export interface ReelsSelect<T extends boolean = true> {
 export interface PayloadKvSelect<T extends boolean = true> {
   key?: T;
   data?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "payload-folders_select".
- */
-export interface PayloadFoldersSelect<T extends boolean = true> {
-  name?: T;
-  folder?: T;
-  documentsAndFolders?: T;
-  folderType?: T;
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

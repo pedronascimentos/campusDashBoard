@@ -1,6 +1,6 @@
 // storage-adapter-import-placeholder
 import { postgresAdapter } from '@payloadcms/db-postgres'
-
+import { s3Storage } from '@payloadcms/storage-s3'
 import sharp from 'sharp' // sharp-import
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
@@ -21,11 +21,37 @@ import { AppLayout } from './globals/AppLayout'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+
+const storage = s3Storage({
+  collections: {
+    'media': {
+      disableLocalStorage: true,
+      prefix: "media",
+      // generateFileURL deve estar AQUI, dentro da configuração da collection
+      generateFileURL: ({ filename, prefix }) => {
+        return `${process.env.R2_PUBLIC_URL}/${prefix}/${filename}`
+      },
+    },
+  },
+  bucket: process.env.R2_BUCKET || "campus",
+  config: {
+    endpoint: `https://${process.env.R2_ENDPOINT}` || "", 
+    credentials: {
+      accessKeyId: process.env.R2_ACCESS_KEY_ID || "",
+      secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || "",
+    },
+    region: "auto",
+    forcePathStyle: true,
+  },
+});
+
+
+
 export default buildConfig({
   admin: {
-    importMap: {
-      baseDir: path.resolve(dirname),
-    },
+    // importMap: {
+    //   baseDir: path.resolve(dirname),
+    // },
     user: 'users',
     meta: {
       titleSuffix: '- Campus Multiplataforma',
@@ -56,7 +82,7 @@ export default buildConfig({
   }),
   collections: [Articles, Categories, Media, Users, Themes, Analytics, Reels],
   
-  plugins: [],
+  plugins: [storage],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [
     AppLayout

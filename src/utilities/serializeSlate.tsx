@@ -1,46 +1,43 @@
-// src/utilities/serializeSlate.tsx
-
 import React, { Fragment } from 'react'
 import escapeHTML from 'escape-html'
+import { getYoutubeVideoId, getYoutubeEmbedUrl } from './youtubeHelper'
 
-/**
- * Check if a node is a text node
- */
+// Função auxiliar para verificar se é um nó de texto
 const isText = (node: any): boolean => {
   return typeof node.text === 'string'
 }
 
+// Função auxiliar para serializar legendas (que também podem ser Rich Text)
+const serializeCaption = (caption: any): React.ReactNode => {
+  if (!caption) return null;
+  let captionNodes = [];
+  if (Array.isArray(caption)) { // Formato Slate
+    captionNodes = caption;
+  } else if (caption.root && Array.isArray(caption.root.children)) { // Formato Lexical (compatibilidade)
+    captionNodes = caption.root.children;
+  } else if (typeof caption === 'string') { // Formato texto simples (legado)
+    return <span dangerouslySetInnerHTML={{ __html: escapeHTML(caption) }} />;
+  }
+  if (captionNodes.length > 0) {
+    return serializeSlate(captionNodes);
+  }
+  return null;
+}
+
 /**
- * Serializes Slate JSON to HTML
+ * Serializa o JSON do Slate para elementos React
  */
 export const serializeSlate = (children: any[]): React.ReactElement[] => {
   return children?.map((node, i) => {
-    if (isText(node)) {
-      let text = <span dangerouslySetInnerHTML={{ __html: escapeHTML(node.text) }} />
 
-      if (node.bold) {
-        text = <strong key={i}>{text}</strong>
-      }
-      if (node.code) {
-        text = <code key={i}>{text}</code>
-      }
-      if (node.italic) {
-        text = <em key={i}>{text}</em>
-      }
-      if (node.underline) {
-        text = (
-          <span key={i} style={{ textDecoration: 'underline' }}>
-            {text}
-          </span>
-        )
-      }
-      if (node.strikethrough) {
-        text = (
-          <span key={i} style={{ textDecoration: 'line-through' }}>
-            {text}
-          </span>
-        )
-      }
+    // Serialização de Nós de Texto (com correção de key)
+    if (isText(node)) {
+      let text = <span dangerouslySetInnerHTML={{ __html: escapeHTML(node.text).replace(/\n/g, '<br />') }} />
+      if (node.bold) text = <strong>{text}</strong>
+      if (node.code) text = <code>{text}</code>
+      if (node.italic) text = <em>{text}</em>
+      if (node.underline) text = <span style={{ textDecoration: 'underline' }}>{text}</span>
+      if (node.strikethrough) text = <span style={{ textDecoration: 'line-through' }}>{text}</span>
       return <Fragment key={i}>{text}</Fragment>
     }
 
@@ -48,7 +45,6 @@ export const serializeSlate = (children: any[]): React.ReactElement[] => {
       return null
     }
 
-    // Garante que 'children' seja um array antes de serializar (para 'default' case)
     const childrenNodes = Array.isArray(node.children) ? node.children : []
 
     switch (node.type) {
@@ -72,61 +68,95 @@ export const serializeSlate = (children: any[]): React.ReactElement[] => {
         return <ol key={i}>{serializeSlate(childrenNodes)}</ol>
       case 'li':
         return <li key={i}>{serializeSlate(childrenNodes)}</li>
+
       case 'link':
+        const videoId = getYoutubeVideoId(node.url);
+
+        // Se for um link do YouTube, renderiza o embed
+        if (videoId) {
+          return (
+            <div
+              key={i}
+              className="youtube-embed-container"
+              style={{
+                position: 'relative',
+                width: '100%',
+                paddingBottom: '56.25%', // 16:9
+                margin: '1.5rem 0',
+                overflow: 'hidden',
+                borderRadius: '8px',
+              }}
+            >
+              <iframe
+                src={getYoutubeEmbedUrl(videoId)}
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+            </div>
+          );
+        }
+
+        // Se não, renderiza um link padrão
         return (
           <a
             key={i}
             href={escapeHTML(node.url)}
             target={node.newTab ? '_blank' : undefined}
-            rel={node.newTab ? 'noopener noreferrer' : undefined}
+            rel={node.newTab ? 'noopener noreferrer' : 'noopener'}
           >
             {serializeSlate(childrenNodes)}
           </a>
         )
 
-      // --- CORREÇÃO APLICADA AQUI ---
       case 'upload':
         const uploadData = node.value
         if (uploadData && typeof uploadData === 'object') {
-          
-          // Lógica para extrair os 'children' da legenda,
-          // não importa se é um array ou um objeto { root: ... }
-          let captionNodes = []
-          if (uploadData.caption) {
-            if (Array.isArray(uploadData.caption)) {
-              captionNodes = uploadData.caption
-            } else if (uploadData.caption.root && Array.isArray(uploadData.caption.root.children)) {
-              captionNodes = uploadData.caption.root.children
-            }
-          }
-
+          const caption = serializeCaption(uploadData.caption);
           return (
             <figure key={i} className="upload">
               <img src={uploadData.url} alt={uploadData.alt || ''} />
-              
-              {/* Serializa recursivamente os nós da legenda */}
-              {captionNodes.length > 0 && (
+              {caption && (
                 <figcaption>
-                  {serializeSlate(captionNodes)}
+                  {caption}
                 </figcaption>
               )}
             </figure>
           )
         }
         return null
-      // --- FIM DA CORREÇÃO ---
 
       case 'relationship':
-        return (
-          <div key={i} className="relationship">
-            {node.value && typeof node.value === 'object' && (
-              <p>Related: {node.value.title || node.value.name || 'Untitled'}</p>
-            )}
-          </div>
-        )
+        return null // Implemente se necessário
 
       default:
+        // ===============================================
+        // INÍCIO DA CORREÇÃO DE HIDRATAÇÃO
+        // ===============================================
+
+        // Verifica se este nó de parágrafo contém *apenas* um link de vídeo
+        const isOnlyVideo = childrenNodes.length === 1 &&
+          childrenNodes[0].type === 'link' &&
+          getYoutubeVideoId(childrenNodes[0].url);
+
+        if (isOnlyVideo) {
+          // Se for apenas um vídeo, renderiza o vídeo *sem* a tag <p>
+          return <Fragment key={i}>{serializeSlate(childrenNodes)}</Fragment>;
+        }
+
+        // Caso contrário, renderiza como um parágrafo normal
         return <p key={i}>{serializeSlate(childrenNodes)}</p>
+      // ===============================================
+      // FIM DA CORREÇÃO
+      // ===============================================
     }
   }) as React.ReactElement[]
 }

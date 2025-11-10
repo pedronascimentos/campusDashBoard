@@ -31,6 +31,18 @@ const nextConfig = {
   },
   reactStrictMode: true,
   redirects,
+  async rewrites() {
+    return [
+      {
+        source: '/',
+        destination: '/index.html',
+      },
+      {
+        source: '/artigo/:slug',
+        destination: '/index.html',
+      },
+    ]
+  },
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })

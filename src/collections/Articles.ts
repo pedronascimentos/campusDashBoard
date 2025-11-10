@@ -4,11 +4,16 @@ import { authenticated } from '../access/authenticated'
 
 export const Articles: CollectionConfig = {
   slug: 'articles',
+  labels: {
+    singular: 'Artigo',
+    plural: 'Artigos',
+  },
   
   // Admin UI
   admin: {
     defaultColumns: ['title', 'status', 'theme', 'createdAt'],
     useAsTitle: 'title',
+    group: 'Content',
     livePreview: {
       url: ({ data }) => {
         const baseUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000'
@@ -27,10 +32,12 @@ export const Articles: CollectionConfig = {
     update: ({ req: { user } }) => {
       // Admins and editors can edit everything
       if (['admin', 'editor'].includes((user as any)?.role)) return true
-      // Reporters and art editors can only edit their own articles
-      return {
-        createdBy: { equals: user?.id }
-      }
+      
+      // Reporters and art editors can edit any article (to change status to pending_approval)
+      // This allows them to submit articles for review
+      if (['reporter', 'art_editor'].includes((user as any)?.role)) return true
+      
+      return false
     },
     delete: ({ req: { user } }) => {
       // Only admins and editors can delete
@@ -53,6 +60,20 @@ export const Articles: CollectionConfig = {
               maxLength: 200,
               admin: {
                 description: 'Article title (max 200 characters)',
+              },
+              // Reporters can only edit title on their own drafts
+              access: {
+                update: ({ req, doc }) => {
+                  const userRole = (req.user as any)?.role
+                  if (['admin', 'editor'].includes(userRole)) return true
+                  
+                  // Reporters can edit if it's their article and not published
+                  if (['reporter', 'art_editor'].includes(userRole)) {
+                    return doc?.createdBy === req.user?.id && doc?.status !== 'published'
+                  }
+                  
+                  return false
+                }
               }
             },
             {
@@ -82,6 +103,20 @@ export const Articles: CollectionConfig = {
                   ],
                 },
               }),
+              // Reporters can only edit content on their own drafts
+              access: {
+                update: ({ req, doc }) => {
+                  const userRole = (req.user as any)?.role
+                  if (['admin', 'editor'].includes(userRole)) return true
+                  
+                  // Reporters can edit if it's their article and not published
+                  if (['reporter', 'art_editor'].includes(userRole)) {
+                    return doc?.createdBy === req.user?.id && doc?.status !== 'published'
+                  }
+                  
+                  return false
+                }
+              }
             },
           ],
         },
@@ -215,25 +250,52 @@ export const Articles: CollectionConfig = {
               admin: {
                 description: 'Current publication status',
               },
+              // Control who can change status and to what values
+              access: {
+                update: ({ req, doc }) => {
+                  const userRole = (req.user as any)?.role
+                  
+                  // Admins and editors can always change status
+                  if (['admin', 'editor'].includes(userRole)) return true
+                  
+                  // Reporters and art editors can only change from draft to pending_approval
+                  if (['reporter', 'art_editor'].includes(userRole)) {
+                    return doc?.status === 'draft' || doc?.status === 'rejected'
+                  }
+                  
+                  return false
+                }
+              },
               hooks: {
                 beforeChange: [
-                  ({ req, value }) => {
+                  ({ req, value, originalDoc }) => {
                     const userRole = (req.user as any)?.role
+                    const currentStatus = originalDoc?.status
                     
-                    // Reporters and art editors cannot publish directly
-                    if (['reporter', 'art_editor'].includes(userRole) && value === 'published') {
-                      return 'pending_approval'
+                    // Reporters and art editors can only move to pending_approval
+                    if (['reporter', 'art_editor'].includes(userRole)) {
+                      // They can only change from draft/rejected to pending_approval
+                      if (['draft', 'rejected'].includes(currentStatus) && value === 'pending_approval') {
+                        return 'pending_approval'
+                      }
+                      // If they try to publish, force to pending_approval
+                      if (value === 'published') {
+                        return 'pending_approval'
+                      }
+                      // Keep current status if they try to change to something else
+                      return currentStatus || 'draft'
                     }
                     
-                    // Only admins and editors can publish
-                    if (value === 'published' && !['admin', 'editor'].includes(userRole)) {
-                      return 'pending_approval'
+                    // Admins and editors have full control
+                    if (['admin', 'editor'].includes(userRole)) {
+                      return value
                     }
                     
-                    return value
+                    // Default: keep current status
+                    return currentStatus || 'draft'
                   }
                 ]
-              }
+              },
             },
             {
               name: 'publishedAt',
@@ -243,7 +305,22 @@ export const Articles: CollectionConfig = {
                 date: {
                   pickerAppearance: 'dayAndTime',
                 },
-                condition: (data) => data.status === 'published',
+                condition: (data) => data?.status === 'published',
+              },
+              hooks: {
+                beforeChange: [
+                  ({ value, originalDoc, data }) => {
+                    // If status is changing to 'published' and publishedAt is not set, use current time
+                    if (data?.status === 'published' && !value) {
+                      return new Date();
+                    }
+                    // If already published and no change to publishedAt, keep original
+                    if (data?.status === 'published' && originalDoc?.status === 'published' && !value) {
+                      return originalDoc.publishedAt;
+                    }
+                    return value;
+                  }
+                ]
               }
             },
             {

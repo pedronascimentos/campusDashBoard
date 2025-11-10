@@ -3,6 +3,10 @@ import { authenticated } from '../access/authenticated'
 
 export const Reels: CollectionConfig = {
   slug: 'reels',
+  labels: {
+    singular: 'Reel',
+    plural: 'Reels',
+  },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'platform', 'url'],

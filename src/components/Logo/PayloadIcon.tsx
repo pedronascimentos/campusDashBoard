@@ -6,8 +6,8 @@ export const PayloadIcon = () => {
       alt="Campus Multiplataforma Icon"
       src="/favicon.png"
       style={{
-        maxWidth: '30px',
-        maxHeight: '30px',
+        maxWidth: '15px',
+        maxHeight: '15px',
         height: 'auto',
       }}
     />

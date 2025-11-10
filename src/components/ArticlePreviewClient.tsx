@@ -2,14 +2,36 @@
 
 import { useEffect, useState } from 'react'
 import { serializeSlate } from '@/utilities/serializeSlate'
+import { ArticleHeader } from '@/components/ArticleHeader'
 
-/**
- * ArticlePreviewClient Component
-...
- */
+// Define a interface para o Artigo (igual à página final)
+interface Media {
+  url: string
+  alt?: string
+  caption?: any
+}
+interface Author {
+  name: string
+}
+interface Category {
+  name: string
+  color?: string
+}
+interface Article {
+  id: string
+  title: string
+  slug: string
+  description?: string
+  featuredImage?: Media
+  content: any
+  authors?: Author[]
+  categories?: Category[]
+  createdAt: string
+  publishedAt?: string
+}
 
 interface ArticlePreviewClientProps {
-  initialArticle: any
+  initialArticle: Article
   slug: string
 }
 
@@ -17,12 +39,12 @@ export function ArticlePreviewClient({ initialArticle, slug }: ArticlePreviewCli
   const [article, setArticle] = useState(initialArticle)
   const [lastUpdate, setLastUpdate] = useState(new Date().toISOString())
 
-  // Auto-refresh effect
+  // Efeito de Auto-Refresh (a principal diferença desta página)
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
         const response = await fetch(
-          `/api/articles?where[slug][equals]=${slug}&draft=true&depth=2&limit=1`,
+          `/api/articles?where[slug][equals]=${slug}&draft=true&depth=10`, // Busca rascunho
         )
         const data = await response.json()
 
@@ -36,16 +58,14 @@ export function ArticlePreviewClient({ initialArticle, slug }: ArticlePreviewCli
       } catch (error) {
         console.error('Error refreshing preview:', error)
       }
-    }, 2000)
+    }, 2000) // Atualiza a cada 2 segundos
 
     return () => clearInterval(interval)
   }, [slug, article])
 
-  // Process data for display
-  const authors =
-    (article.authors as any[])?.map((author) => author.name).join(' | ') || 'Redação do Campus'
-
-  const categories = (article.categories as any[]) || []
+  // --- Processamento de Dados (Idêntico ao ArticlePage) ---
+  const authors = article.authors?.map((author) => author.name).join(' | ') || 'Redação do Campus'
+  const categories = article.categories || []
 
   const displayDate = new Date(article.publishedAt || article.createdAt)
     .toLocaleString('pt-BR', {
@@ -57,39 +77,39 @@ export function ArticlePreviewClient({ initialArticle, slug }: ArticlePreviewCli
     })
     .replace(',', '')
 
-  const featuredImage =
-    article.featuredImage && typeof article.featuredImage === 'object'
-      ? (article.featuredImage as any)
-      : null
+  const featuredImage = article.featuredImage
+  let featuredImageCaption: React.ReactNode = null;
+  if (featuredImage?.caption) {
+    if (typeof featuredImage.caption === 'object' &&
+      featuredImage.caption.root &&
+      Array.isArray(featuredImage.caption.root.children)) {
+      featuredImageCaption = serializeSlate(featuredImage.caption.root.children);
+    }
+    else if (typeof featuredImage.caption === 'string') {
+      featuredImageCaption = featuredImage.caption;
+    }
+  }
+  if (!featuredImageCaption && featuredImage?.alt) {
+    featuredImageCaption = featuredImage.alt;
+  }
 
-  const featuredImageCaption = featuredImage?.caption || featuredImage?.alt || ''
-
-  // ---------------------------------------------------
-  // CORREÇÃO DA LÓGICA DE CONTEÚDO
-  // ---------------------------------------------------
-  // Encontra o array de 'children' independentemente do formato
   let contentNodes = []
   if (article.content) {
     if (Array.isArray(article.content)) {
-      // Formato antigo/simples: article.content é o array
       contentNodes = article.content
     } else if (article.content.root && Array.isArray(article.content.root.children)) {
-      // Formato novo/padrão: article.content é { root: { children: [...] } }
       contentNodes = article.content.root.children
+    } else if (article.content.children) {
+      contentNodes = article.content.children
     }
   }
-  // ---------------------------------------------------
-  // FIM DA CORREÇÃO
-  // ---------------------------------------------------
 
   return (
     <>
-      {/* Estilos Globais */}
+      {/* Estilos Globais (Idêntico ao ArticlePage) */}
       <style
         dangerouslySetInnerHTML={{
           __html: `
-            /* ... (Seu CSS está correto e permanece o mesmo) ... */
-
             @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap');
             @import url('https://fonts.googleapis.com/css2?family=Rowdies:wght@700&display=swap');
 
@@ -101,6 +121,12 @@ export function ArticlePreviewClient({ initialArticle, slug }: ArticlePreviewCli
               --text-heading: rgba(171, 35, 47, 1);
               --brand-primary: rgba(108, 3, 24, 1);
               --brand-secondary: rgba(171, 35, 47, 1);
+            }
+
+            body {
+              margin: 0;
+              padding: 0;
+              background: #f5f5f5;
             }
 
             .pagina-de-artigo {
@@ -118,28 +144,25 @@ export function ArticlePreviewClient({ initialArticle, slug }: ArticlePreviewCli
               line-height: 1.7;
               overflow-wrap: break-word;
               word-break: break-word;
+              text-align: justify;
             }
             
-            .slate-content h2 {
+            .slate-content h2, .slate-content h3 {
               font-family: var(--font-family-rowdies);
-              font-size: 18px;
               font-weight: 700;
-              color: var(--text-heading);
-              border-top: 2px solid var(--text-heading);
-              padding-top: 0.5rem;
               margin: 2.5rem 0 1rem;
               overflow-wrap: break-word;
               word-break: break-word;
             }
-            
+            .slate-content h2 {
+              font-size: 18px;
+              color: var(--text-heading);
+              border-top: 2px solid var(--text-heading);
+              padding-top: 0.5rem;
+            }
             .slate-content h3 {
-              font-family: var(--font-family-rowdies);
               font-size: 16px;
-              font-weight: 700;
               color: var(--text-black);
-              margin: 2rem 0 1rem;
-              overflow-wrap: break-word;
-              word-break: break-word;
             }
 
             .slate-content a {
@@ -150,8 +173,7 @@ export function ArticlePreviewClient({ initialArticle, slug }: ArticlePreviewCli
               word-break: break-word;
             }
             
-            .slate-content ul,
-            .slate-content ol {
+            .slate-content ul, .slate-content ol {
               margin: 1.5rem 0;
               padding-left: 1.5rem;
             }
@@ -186,7 +208,14 @@ export function ArticlePreviewClient({ initialArticle, slug }: ArticlePreviewCli
               word-break: break-word;
             }
 
-            /* Category badges */
+            .slate-content .upload figcaption p {
+              text-align: center;
+              margin: 0;
+              padding: 0;
+              font-size: 10px;
+              line-height: 1.4;
+            }
+
             .category-badges {
               display: flex;
               flex-wrap: wrap;
@@ -222,7 +251,7 @@ export function ArticlePreviewClient({ initialArticle, slug }: ArticlePreviewCli
               padding: 0.5rem 1rem;
               border-radius: 4px;
               font-size: 10px;
-              z-index: 1000;
+              z-index: 2000; /* Acima do ArticleHeader */
             }
           `,
         }}
@@ -233,71 +262,15 @@ export function ArticlePreviewClient({ initialArticle, slug }: ArticlePreviewCli
         Atualizado: {new Date(lastUpdate).toLocaleTimeString('pt-BR')}
       </div>
 
-      {/* Estrutura da Página */}
-      <div className="pagina-de-artigo">
-        {/* Header do App */}
-        <div
-          style={{
-            background: 'var(--brand-primary)',
-            color: 'white',
-            padding: '1rem 1.5rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '1rem',
-            boxShadow: '0px 0.33px 0px 0px rgba(0,0,0,0.5)',
-          }}
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M16 7H3.83L9.42 1.41L8 0L0 8L8 16L9.41 14.59L3.83 9H16V7Z" fill="white" />
-          </svg>
-          <img
-            src="https://s3-alpha-sig.figma.com/img/d660/9611/49b951c89f5c404d16e788afb441a115?Expires=1731283200&Key-Pair-Id=K1F2S4F31828P4&Signature=gK-9c-x1J~t663p4p8aWn14Ff2q2-3m~FvQ~7Vp2r639-6zN6-g3iW2uF-t~59kP~K-28yJd2V80B9y4R-3t0Q64tE9a7eU0eN5M-iA6zI-d7x7o3y-N1f9~vV3jY2T2rR0h5rS8pL1Z1oW~2hN-c5T3aR2bM0fE6tG1qW-k~y~4z-b8d1v-s6~9a4w~8oR-c5rT~1eW-f3r2w-u5o3p~9l-b2v-i4t-y-q6w~7u~9p-a~2f-e8n-j5o~k~5c-o~l-x~5a-c~7~9w__"
-            style={{ width: '130px', height: 'auto' }}
-            alt="logo"
-          />
-        </div>
+      {/* Layout da Página (Idêntico ao ArticlePage) */}
+      <main className="pagina-de-artigo">
+        <ArticleHeader />
 
-        {/* Imagem Destacada */}
-        {featuredImage && (
-          <img
-            src={featuredImage.url}
-            alt={featuredImage.alt}
-            style={{
-              width: '100%',
-              height: '180px',
-              objectFit: 'cover',
-              objectPosition: 'center',
-              display: 'block',
-            }}
-          />
-        )}
-
-        {/* Área de Conteúdo */}
-        <div style={{ padding: '1.5rem 24px 2rem 24px' }}>
-          {/* Legenda */}
-          {featuredImageCaption && (
-            <figcaption
-              style={{
-                fontFamily: 'var(--font-family-quicksand)',
-                fontWeight: 400,
-                fontSize: '10px',
-                color: 'var(--text-black)',
-                margin: '0 0 1.5rem 0',
-                padding: '0 0.5rem',
-                overflowWrap: 'break-word',
-                wordBreak: 'break-word',
-              }}
-            >
-              {featuredImageCaption}
-            </figcaption>
-          )}
-
-          {/* Header do Artigo */}
+        <div style={{ padding: '20px 20px 120px 20px' }}>
           <header>
-            {/* Category Badges */}
             {categories.length > 0 && (
               <div className="category-badges">
-                {categories.map((cat: any, idx: number) => (
+                {categories.map((cat, idx) => (
                   <span key={idx} className={`category-badge ${cat.color || 'gray'}`}>
                     {cat.name}
                   </span>
@@ -305,61 +278,80 @@ export function ArticlePreviewClient({ initialArticle, slug }: ArticlePreviewCli
               </div>
             )}
 
-            <h1
-              style={{
-                fontFamily: 'var(--font-family-quicksand)',
-                fontWeight: 500,
-                fontSize: '20px',
-                color: 'var(--text-black)',
-                lineHeight: 1.3,
-                marginBottom: '0.75rem',
-                overflowWrap: 'break-word',
-                wordBreak: 'break-word',
-              }}
-            >
+            <h1 style={{
+              fontFamily: 'var(--font-family-quicksand)',
+              fontWeight: 500,
+              fontSize: '20px',
+              color: 'var(--text-black)',
+              lineHeight: 1.3,
+              marginBottom: '0.75rem',
+              overflowWrap: 'break-word',
+              wordBreak: 'break-word',
+            }}>
               {article.title}
             </h1>
 
-            <p
-              style={{
-                fontFamily: 'var(--font-family-quicksand)',
-                fontWeight: 400,
-                fontSize: '10px',
-                color: 'var(--text-black)',
-                textTransform: 'uppercase',
-                margin: 0,
-              }}
-            >
+            <p style={{
+              fontFamily: 'var(--font-family-quicksand)',
+              fontWeight: 400,
+              fontSize: '10px',
+              color: 'var(--text-black)',
+              textTransform: 'uppercase',
+              margin: 0,
+            }}>
               Por {authors}
             </p>
 
-            <p
-              style={{
-                fontFamily: 'var(--font-family-quicksand)',
-                fontWeight: 400,
-                fontSize: '10px',
-                color: 'var(--text-black)',
-                margin: '0.25rem 0 1.5rem 0',
-              }}
-            >
+            <p style={{
+              fontFamily: 'var(--font-family-quicksand)',
+              fontWeight: 400,
+              fontSize: '10px',
+              color: 'var(--text-black)',
+              margin: '0.25rem 0 1.5rem 0',
+            }}>
               {displayDate}
             </p>
           </header>
 
-          {/* ---------------------------------------------------
-            CORREÇÃO DA CONDIÇÃO DE RENDERIZAÇÃO
-            ---------------------------------------------------
-          */}
-          {/* Renderiza se contentNodes (o array) tiver itens */}
+          {featuredImage && (
+            <figure style={{ margin: '0 0 1.5rem 0' }}>
+              <img
+                src={featuredImage.url}
+                alt={featuredImage.alt}
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  aspectRatio: '16 / 9',
+                  objectFit: 'cover',
+                  display: 'block',
+                }}
+              />
+              {featuredImageCaption && (
+                <figcaption
+                  className="slate-content" // Usa a classe para herdar estilos
+                  style={{
+                    fontFamily: 'var(--font-family-quicksand)',
+                    fontWeight: 400,
+                    fontSize: '10px',
+                    color: 'var(--text-black)',
+                    margin: '0.5rem 0 1.5rem 0',
+                    padding: '0 0.5rem',
+                    overflowWrap: 'break-word',
+                    wordBreak: 'break-word',
+                    textAlign: 'center',
+                  }}
+                >
+                  {featuredImageCaption}
+                </figcaption>
+              )}
+            </figure>
+          )}
+
           {contentNodes.length > 0 && (
             <article className="slate-content">{serializeSlate(contentNodes)}</article>
           )}
-          {/* ---------------------------------------------------
-            FIM DA CORREÇÃO
-            ---------------------------------------------------
-          */}
         </div>
-      </div>
+      </main>
     </>
   )
 }

@@ -6,16 +6,36 @@
  * - Background: #FFFFFF (white)
  * - Text: #000000 (black)
  * 
- * This stylesheet overrides Payload's default theme to create
- * a custom branded admin interface with consistent colors across
- * all admin panel components.
+ * Font: Inter from Google Fonts
+ * Icons: Lucide Icons via CDN
  */
 
-/* ==========================================================================
-   SIDEBAR STYLING
-   ========================================================================== */
+/* Importar fonte Inter do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-/* Main sidebar background */
+/* Aplicar fonte globalmente */
+.template-default * {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+.template-default .nav a.active::before,
+.template-default .nav button.active::before {
+  display: inline-block !important;
+  filter: brightness(0) invert(1) !important;
+  content: "" !important;
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* ==========================================================================
+   VARIÁVEIS CSS
+   ========================================================================== */
 :root {
   --theme-bg: #FFFFFF;
   --theme-elevation-0: #FFFFFF;
@@ -32,126 +52,242 @@
   --theme-elevation-800: #000000;
   --theme-elevation-900: #000000;
   --theme-elevation-1000: #000000;
-  
+    --payload-admin-css-loaded: 1;
+
   --theme-text: #000000;
-  --theme-success-50: #E8F5E9;
-  --theme-success-100: #C8E6C9;
-  --theme-success-150: #A5D6A7;
-  --theme-success-200: #81C784;
-  --theme-success-250: #66BB6A;
   --theme-success-300: #4CAF50;
-  --theme-success-350: #43A047;
-  --theme-success-400: #388E3C;
-  --theme-success-450: #2E7D32;
-  --theme-success-500: #1B5E20;
-  --theme-success-550: #1B5E20;
-  --theme-success-600: #1B5E20;
-  --theme-success-650: #1B5E20;
-  --theme-success-700: #1B5E20;
-  --theme-success-750: #1B5E20;
-  --theme-success-800: #1B5E20;
-  
-  --theme-error-50: #FFEBEE;
-  --theme-error-100: #FFCDD2;
-  --theme-error-150: #EF9A9A;
-  --theme-error-200: #E57373;
-  --theme-error-250: #EF5350;
   --theme-error-300: #F44336;
-  --theme-error-350: #E53935;
-  --theme-error-400: #D32F2F;
-  --theme-error-450: #C62828;
-  --theme-error-500: #B71C1C;
-  --theme-error-550: #B71C1C;
-  --theme-error-600: #B71C1C;
-  --theme-error-650: #B71C1C;
-  --theme-error-700: #B71C1C;
-  --theme-error-750: #B71C1C;
-  --theme-error-800: #B71C1C;
-  
-  --theme-warning-50: #FFF3E0;
-  --theme-warning-100: #FFE0B2;
-  --theme-warning-150: #FFCC80;
-  --theme-warning-200: #FFB74D;
-  --theme-warning-250: #FFA726;
   --theme-warning-300: #FF9800;
-  --theme-warning-350: #FB8C00;
-  --theme-warning-400: #F57C00;
-  --theme-warning-450: #EF6C00;
-  --theme-warning-500: #E65100;
-  --theme-warning-550: #E65100;
-  --theme-warning-600: #E65100;
-  --theme-warning-650: #E65100;
-  --theme-warning-700: #E65100;
-  --theme-warning-750: #E65100;
-  --theme-warning-800: #E65100;
 }
 
-/* Sidebar container */
+/* ==========================================================================
+   SIDEBAR STYLING
+   ========================================================================== */
 .template-default .nav {
   background-color: #6C0318 !important;
+  padding: 1rem 0;
 }
 
-/* Sidebar links and text */
 .template-default .nav a,
 .template-default .nav button,
 .template-default .nav .nav-group__label {
   color: #FFFFFF !important;
+  transition: all 0.2s ease;
 }
 
-/* Sidebar hover states */
 .template-default .nav a:hover,
 .template-default .nav button:hover {
   background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
-/* Active sidebar item */
+/* 1. Modifique sua regra .active existente para isto */
 .template-default .nav a.active,
 .template-default .nav button.active {
-  background-color: rgba(255, 255, 255, 0.2) !important;
-  font-weight: 600;
+  background-color: rgba(160, 14, 14, 0.2) !important;
+  font-weight: 600 !important; /* Adicionado !important */
+  color: #FFFFFF !important;    /* FORÇA a cor do texto a ficar branca */
 }
 
-/* Sidebar icons */
+/* 2. ADICIONE ESTA NOVA REGRA
+   Isto força o ícone customizado a aparecer no estado ativo */
+
+
 .template-default .nav svg {
   color: #FFFFFF !important;
 }
 
-/* Sidebar logo area */
 .template-default .nav .nav-header {
   background-color: #6C0318 !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.5rem 1rem;
 }
 
-/* Custom logo styling in admin panel */
 .template-default .nav .nav-header img {
   max-width: 150px !important;
   height: auto !important;
 }
 
-/* Logo and icon wrapper */
-.template-default .logo,
-.template-default .icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* ==========================================================================
+   ÍCONES DA SIDEBAR COM LUCIDE ICONS (CORRIGIDO)
+   ========================================================================== */
+
+/* 1. Estilo base do Link (com alinhamento corrigido)
+ * -------------------------------------------------------------------------- */
+.template-default .nav a {
+  display: flex !important;
+  align-items: center !important;
+  
+  /* * Alinhamento: O texto começa a 56px da esquerda,
+   * deixando espaço para o ícone (20px) e margens.
+   */
+  padding: 14px 20px 14px 56px !important; 
+  margin: 8px 12px !important;
+  border-radius: 8px !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  position: relative !important; /* Define o 'a' como pai para o ícone absoluto */
+  color: #FFFFFF !important;     /* Força a cor base do texto */
+  /* Remove 'gap: 16px !important;' pois agora usamos padding */
+}
+
+/* Esconder ícones SVG padrão do Payload */
+.template-default .nav a > svg:first-child {
+  display: none !important;
+}
+
+/* 2. Estilo base do Ícone (com alinhamento corrigido)
+ * -------------------------------------------------------------------------- */
+.template-default .nav a::before {
+  content: "";
+  display: inline-block !important; /* Garante que apareça */
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+
+  /* Posiciona o ícone absolutamente dentro do padding-left do 'a' */
+  position: absolute;
+  left: 20px; /* 20px de margem da borda */
+  top: 50%;
+  transform: translateY(-50%); /* Centraliza verticalmente */
+
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: brightness(0) invert(1) !important; /* Torna os ícones brancos */
+  transition: all 0.2s ease;
+}
+
+/* 3. Estilo de Hover
+ * -------------------------------------------------------------------------- */
+.template-default .nav a:hover,
+.template-default .nav button:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #FFFFFF !important; /* Garante que o texto fique branco no hover */
+}
+
+/* 4. ESTADO ATIVO (A GRANDE CORREÇÃO)
+ * -------------------------------------------------------------------------- */
+
+/* Regra para o link 'a' ATIVO */
+.template-default .nav a.active {
+  background-color: rgba(160, 14, 14, 0.2) !important;
+  font-weight: 600 !important;
+  color: #FFFFFF !important; /* Força o 'a' a ter cor branca */
+}
+
+/* * Regra para o 'span' DENTRO do link 'a' ATIVO.
+ * Esta é a regra crucial que faltava. Ela força o texto a ficar
+ * branco e a manter a fonte correta.
+ */
+.template-default .nav a.active span {
+  color: #FFFFFF !important; /* FORÇA o texto a ficar branco */
+  font-weight: 600 !important; /* Garante o peso da fonte */
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important; /* Garante a fonte */
+}
+  
+/* * Regra para o ícone '::before' DENTRO do link 'a' ATIVO.
+ * O Payload esconde o '::before' por padrão no .active.
+ * Esta regra o força a aparecer.
+ */
+.template-default .nav a.active::before {
+  display: inline-block !important; /* FORÇA o ícone a aparecer */
+  filter: brightness(0) invert(1) !important; /* Garante que fique branco */
+  
+  /* Redefine o posicionamento para garantir */
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Forçar ícones a aparecer em todos os estados */
+.template-default .nav a::before,
+.template-default .nav a.active::before,
+.template-default .nav a:hover::before {
+  display: inline-block !important;
+  filter: brightness(0) invert(1) !important;
+  content: "" !important;
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Ícones específicos (copie o resto dos seus ícones aqui) */
+.template-default .nav a[href*="/admin/collections/articles"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2'/%3E%3Cpath d='M18 14h-8'/%3E%3Cpath d='M15 18h-5'/%3E%3Cpath d='M10 6h8v4h-8V6Z'/%3E%3C/svg%3E");
+}
+
+.template-default .nav a[href*="/admin/collections/media"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='3' rx='2' ry='2'/%3E%3Ccircle cx='9' cy='9' r='2'/%3E%3Cpath d='m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21'/%3E%3C/svg%3E");
+}
+
+.template-default .nav a[href*="/admin/collections/users"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E");
+}
+
+.template-default .nav a[href*="/admin/collections/themes"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='13.5' cy='6.5' r='.5' fill='white'/%3E%3Ccircle cx='17.5' cy='10.5' r='.5' fill='white'/%3E%3Ccircle cx='8.5' cy='7.5' r='.5' fill='white'/%3E%3Ccircle cx='6.5' cy='12.5' r='.5' fill='white'/%3E%3Cpath d='M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z'/%3E%3C/svg%3E");
+}
+
+.template-default .nav a[href*="/admin/collections/analytics"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 3v18h18'/%3E%3Cpath d='m19 9-5 5-4-4-3 3'/%3E%3C/svg%3E");
+}
+
+.template-default .nav a[href*="/admin/collections/reels"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='3' rx='2'/%3E%3Cpath d='m9 8 6 4-6 4Z'/%3E%3C/svg%3E");
+}
+
+.template-default .nav a[href*="/admin/collections/categories"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z'/%3E%3C/svg%3E");
+}
+
+.template-default .nav a[href*="/admin/globals"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
+}
+/* ==========================================================================
+   GRUPOS DA SIDEBAR
+   ========================================================================== */
+.template-default .nav-group__toggle {
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.template-default .nav a.active,
+.template-default .nav a.active *,
+.template-default .nav button.active,
+.template-default .nav button.active * {
+  background-color: rgba(160, 14, 14, 0.2) !important;
+  color: #FFFFFF !important;
+  font-weight: 600 !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
+.template-default .nav-group__content {
+  display: block !important;
+  max-height: none !important;
+  opacity: 1 !important;
+  padding-left: 0 !important;
 }
 
 /* ==========================================================================
    HEADER STYLING
    ========================================================================== */
-
-/* Main header background */
 .template-default .app-header {
   background-color: #FFFFFF !important;
   border-bottom: 1px solid #E0E0E0;
 }
 
-/* Header text */
 .template-default .app-header *:not(svg) {
   color: #000000 !important;
 }
 
-/* Header icons */
 .template-default .app-header svg {
   color: #000000 !important;
 }
@@ -159,27 +295,17 @@
 /* ==========================================================================
    MAIN CONTENT AREA
    ========================================================================== */
-
-/* Main content background */
 .template-default .template__wrap,
 .template-default .doc-template,
 .template-default .render-fields {
   background-color: #FFFFFF !important;
 }
 
-/* Content text */
-.template-default .doc-template *:not(svg),
-.template-default .render-fields * {
-  color: #000000;
-}
-
-/* Field labels */
 .template-default .field-type label {
   color: #000000 !important;
   font-weight: 500;
 }
 
-/* Input backgrounds */
 .template-default input,
 .template-default textarea,
 .template-default select {
@@ -188,7 +314,6 @@
   color: #000000 !important;
 }
 
-/* Input focus states */
 .template-default input:focus,
 .template-default textarea:focus,
 .template-default select:focus {
@@ -199,8 +324,6 @@
 /* ==========================================================================
    BUTTONS
    ========================================================================== */
-
-/* Primary button */
 .template-default .btn--style-primary,
 .template-default button[type="submit"] {
   background-color: #6C0318 !important;
@@ -214,7 +337,6 @@
   border-color: #8B1538 !important;
 }
 
-/* Secondary button */
 .template-default .btn--style-secondary {
   background-color: #FFFFFF !important;
   border-color: #6C0318 !important;
@@ -225,11 +347,39 @@
   background-color: #F5F5F5 !important;
 }
 
+/* Botão de minimizar sidebar */
+.template-default .nav-toggler,
+.template-default button[aria-label*="Toggle"],
+.template-default .template__toggle,
+.template-default button[class*="nav-toggle"] {
+  background-color: #6C0318 !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.template-default .nav-toggler:hover,
+.template-default button[aria-label*="Toggle"]:hover {
+  background-color: #8B1538 !important;
+}
+
+/* Botões de menu (3 pontos) */
+.template-default button[aria-label="More actions"],
+.template-default button[class*="popup-button"],
+.template-default .popup-button {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+  border: 1px solid #E0E0E0 !important;
+}
+
+.template-default button[aria-label="More actions"]:hover,
+.template-default .popup-button:hover {
+  background-color: #F5F5F5 !important;
+  border-color: #6C0318 !important;
+}
+
 /* ==========================================================================
    TABLES & LISTS
    ========================================================================== */
-
-/* Table headers */
 .template-default .collection-list table thead {
   background-color: #F5F5F5 !important;
 }
@@ -239,7 +389,6 @@
   font-weight: 600;
 }
 
-/* Table rows */
 .template-default .collection-list table tbody tr {
   border-bottom: 1px solid #E0E0E0 !important;
 }
@@ -248,98 +397,46 @@
   background-color: #F5F5F5 !important;
 }
 
-/* ==========================================================================
-   CARDS & PANELS
-   ========================================================================== */
-
-/* Card backgrounds */
-.template-default .card,
-.template-default .panel {
-  background-color: #FFFFFF !important;
-  border: 1px solid #E0E0E0 !important;
-}
 
 /* ==========================================================================
-   RICH TEXT EDITOR (SLATE)
+   DATE PICKER FIX
    ========================================================================== */
-
-/* Slate editor container */
-.template-default .slate-editor {
-  background-color: #FFFFFF !important;
-  border: 1px solid #E0E0E0 !important;
-}
-
-/* Slate toolbar */
-.template-default .slate-toolbar {
-  background-color: #F5F5F5 !important;
-  border-bottom: 1px solid #E0E0E0 !important;
-}
-
-/* Slate toolbar buttons */
-.template-default .slate-toolbar button {
-  color: #000000 !important;
-}
-
-.template-default .slate-toolbar button:hover {
-  background-color: #E0E0E0 !important;
-}
-
-.template-default .slate-toolbar button.active {
-  background-color: #6C0318 !important;
-  color: #FFFFFF !important;
+.template-default .date-time-picker svg,
+.template-default [class*="date"] svg,
+.template-default [class*="calendar"] svg {
+  width: 1rem !important;
+  height: 1rem !important;
+  max-width: 1rem !important;
+  max-height: 1rem !important;
 }
 
 /* ==========================================================================
-   TABS
+   RESPONSIVIDADE
    ========================================================================== */
-
-/* Tab navigation */
-.template-default .tabs-wrapper .tabs-nav {
-  border-bottom: 2px solid #E0E0E0 !important;
+@media (max-width: 768px) {
+  .template-default .nav a {
+    padding: 12px 16px !important;
+    margin: 6px 8px !important;
+    font-size: 14px !important;
+    gap: 14px !important;
+  }
+  
+  .template-default .nav a::before {
+    width: 18px;
+    height: 18px;
+  }
 }
 
-/* Tab buttons */
-.template-default .tabs-wrapper .tabs-nav button {
-  color: #000000 !important;
-}
-
-.template-default .tabs-wrapper .tabs-nav button:hover {
-  color: #6C0318 !important;
-}
-
-.template-default .tabs-wrapper .tabs-nav button.active {
-  color: #6C0318 !important;
-  border-bottom: 2px solid #6C0318 !important;
-}
-
-/* ==========================================================================
-   TOOLTIPS & POPOVERS
-   ========================================================================== */
-
-.template-default .tooltip,
-.template-default .popup {
-  background-color: #000000 !important;
-  color: #FFFFFF !important;
-}
-
-/* ==========================================================================
-   SCROLLBARS
-   ========================================================================== */
-
-.template-default ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-.template-default ::-webkit-scrollbar-track {
-  background-color: #F5F5F5;
-}
-
-.template-default ::-webkit-scrollbar-thumb {
-  background-color: #BDBDBD;
-  border-radius: 5px;
-}
-
-.template-default ::-webkit-scrollbar-thumb:hover {
-  background-color: #9E9E9E;
+@media (max-width: 480px) {
+  .template-default .nav a {
+    padding: 10px 12px !important;
+    margin: 4px 4px !important;
+    font-size: 13px !important;
+    gap: 12px !important;
+  }
+  
+  .template-default .nav a::before {
+    width: 16px;
+    height: 16px;
+  }
 }

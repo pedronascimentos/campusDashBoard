@@ -1,89 +1,717 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Multiplataforma</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/12.5.0/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/12.5.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/12.5.0/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/12.5.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/12.5.0/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/12.5.0/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/12.5.0/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/12.5.0/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/12.5.0/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/12.5.0/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background: #f5f5f5;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
 
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        header p {
+            text-align: center;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            border: 2px solid rgba(255,255,255,0.3);
+            font-weight: 600;
+        }
+
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 4rem 2rem;
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #6C0318;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Featured Article */
+        .featured-article {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 2rem 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .featured-badge {
+            display: inline-block;
+            background: #6C0318;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .featured-article img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .featured-article .content {
+            padding: 2rem;
+        }
+
+        .featured-article h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .featured-article .description {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        /* Articles Grid */
+        .section-title {
+            font-size: 2rem;
+            margin: 3rem 0 1.5rem;
+            color: #1a1a1a;
+            font-weight: 700;
+        }
+
+        .category-title {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            color: #6C0318;
+            font-weight: 700;
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .article-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .article-card .card-content {
+            padding: 1.5rem;
+        }
+
+        .article-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .article-card .description {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .article-card .read-more {
+            color: #6C0318;
+            font-weight: 600;
+        }
+
+        /* Single Article View */
+        .article-single {
+            background: white;
+            border-radius: 12px;
+            padding: 3rem;
+            margin: 2rem 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .article-single img {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .article-single h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+            line-height: 1.2;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e0e0e0;
+            font-size: 0.95rem;
+            color: #666;
+        }
+
+        .article-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content h2,
+        .article-content h3,
+        .article-content h4 {
+            margin: 2rem 0 1rem;
+            color: #1a1a1a;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid #6C0318;
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: #666;
+        }
+
+        /* Reels Section */
+        .reels-section {
+            margin: 3rem 0;
+        }
+
+        .reels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .reel-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .reel-card h4 {
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .reel-card a {
+            color: #6C0318;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a1a;
+            color: white;
+            padding: 2rem 0;
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .featured-article h2 {
+                font-size: 1.8rem;
+            }
+
+            .article-single h1 {
+                font-size: 2rem;
+            }
+
+            .article-single {
+                padding: 1.5rem;
+            }
+
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .error-message {
+            background: #ffe0e0;
+            border: 2px solid #ff5252;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            color: #c62828;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
     </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
-    </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="header-content">
+                <h1>Campus Multiplataforma</h1>
+                <p>Suas notícias em todas as plataformas</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" id="app">
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Carregando...</p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Campus Multiplataforma - Todos os direitos reservados</p>
+        </div>
+    </footer>
 
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // Configuration
+        const API_BASE = window.location.origin;
+        const APP = document.getElementById('app');
 
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+        // State
+        let appLayout = null;
+        let currentView = 'home';
+        let currentArticleSlug = null;
+
+        // Initialize
+        init();
+
+        function init() {
+            // Parse URL
+            const path = window.location.pathname;
+            const params = new URLSearchParams(window.location.search);
+            
+            if (path === '/' || path === '/index.html') {
+                loadHome();
+            } else if (path.startsWith('/artigo/')) {
+                const slug = path.split('/artigo/')[1].replace('.html', '');
+                loadArticle(slug);
+            } else {
+                loadHome();
+            }
+
+            // Handle back/forward
+            window.addEventListener('popstate', (e) => {
+                if (e.state?.view === 'article') {
+                    loadArticle(e.state.slug);
+                } else {
+                    loadHome();
+                }
+            });
         }
-      });
+
+        // API Functions
+        async function fetchAPI(endpoint) {
+            try {
+                const response = await fetch(`${API_BASE}/api${endpoint}`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                return null;
+            }
+        }
+
+        async function getAppLayout() {
+            return await fetchAPI('/globals/app-layout?depth=10&draft=false&locale=pt');
+        }
+
+        async function getArticles(limit = 50) {
+            const data = await fetchAPI(`/articles?where[status][equals]=published&sort=-createdAt&limit=${limit}&depth=2`);
+            return data?.docs || [];
+        }
+
+        async function getArticleBySlug(slug) {
+            const data = await fetchAPI(`/articles?where[slug][equals]=${slug}&depth=3`);
+            return data?.docs?.[0] || null;
+        }
+
+        // Render Functions
+        async function loadHome() {
+            currentView = 'home';
+            APP.innerHTML = '<div class="loading"><div class="spinner"></div><p>Carregando...</p></div>';
+
+            const [layout, articles] = await Promise.all([
+                getAppLayout(),
+                getArticles()
+            ]);
+
+            if (!layout && !articles.length) {
+                APP.innerHTML = `
+                    <div class="error-message">
+                        <h3>Erro ao carregar conteúdo</h3>
+                        <p>Não foi possível conectar à API. Verifique se o servidor está rodando.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+
+            // Featured Article
+            if (layout?.sections) {
+                for (const section of layout.sections) {
+                    if (section.blockType === 'featured-article' && section.article && !section.isHidden) {
+                        html += renderFeaturedArticle(section.article);
+                    }
+                }
+            }
+
+            // Categories from Layout
+            if (layout?.sections) {
+                for (const section of layout.sections) {
+                    if (section.blockType === 'category-section' && section.category && !section.isHidden) {
+                        html += renderCategorySection(section.category);
+                    }
+                }
+            }
+
+            // Reels from Layout
+            if (layout?.sections) {
+                for (const section of layout.sections) {
+                    if (section.blockType === 'reels-section' && section.reels && !section.isHidden) {
+                        html += renderReelsSection(section.title || 'Vídeos Curtos', section.reels);
+                    }
+                }
+            }
+
+            // All Articles
+            if (articles.length > 0) {
+                html += `<h2 class="section-title">Últimas Notícias</h2>`;
+                html += '<div class="articles-grid">';
+                articles.forEach(article => {
+                    html += renderArticleCard(article);
+                });
+                html += '</div>';
+            } else {
+                html += `
+                    <div class="empty-state">
+                        <h3>Nenhum artigo publicado ainda</h3>
+                        <p>Em breve teremos novidades por aqui!</p>
+                    </div>
+                `;
+            }
+
+            APP.innerHTML = html;
+            
+            // Add click listeners
+            document.querySelectorAll('[data-article-slug]').forEach(el => {
+                el.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const slug = el.getAttribute('data-article-slug');
+                    navigateToArticle(slug);
+                });
+            });
+        }
+
+        async function loadArticle(slug) {
+            currentView = 'article';
+            currentArticleSlug = slug;
+            
+            APP.innerHTML = '<div class="loading"><div class="spinner"></div><p>Carregando artigo...</p></div>';
+
+            const article = await getArticleBySlug(slug);
+
+            if (!article) {
+                APP.innerHTML = `
+                    <div class="error-message">
+                        <h3>Artigo não encontrado</h3>
+                        <p>O artigo que você procura não existe ou foi removido.</p>
+                        <button class="back-button" onclick="navigateToHome()">Voltar para home</button>
+                    </div>
+                `;
+                return;
+            }
+
+            APP.innerHTML = `
+                <button class="back-button" onclick="navigateToHome()">← Voltar</button>
+                ${renderArticleSingle(article)}
+            `;
+        }
+
+        // Render Components
+        function renderFeaturedArticle(article) {
+            const imageUrl = article.featuredImage?.url || '';
+            const imageAlt = article.featuredImage?.alt || article.title;
+            const description = article.description || '';
+
+            return `
+                <div class="featured-article">
+                    ${imageUrl ? `<img src="${imageUrl}" alt="${imageAlt}">` : ''}
+                    <div class="content">
+                        <span class="featured-badge">DESTAQUE</span>
+                        <h2>${article.title}</h2>
+                        ${description ? `<p class="description">${description}</p>` : ''}
+                        <a href="#" class="back-button" data-article-slug="${article.slug}">
+                            Ler Completo
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderArticleCard(article) {
+            const imageUrl = article.featuredImage?.url || '';
+            const imageAlt = article.featuredImage?.alt || article.title;
+            const description = article.description || '';
+
+            return `
+                <a href="#" class="article-card" data-article-slug="${article.slug}">
+                    ${imageUrl ? `<img src="${imageUrl}" alt="${imageAlt}">` : ''}
+                    <div class="card-content">
+                        <h3>${article.title}</h3>
+                        ${description ? `<p class="description">${description}</p>` : ''}
+                        <span class="read-more">Ler mais →</span>
+                    </div>
+                </a>
+            `;
+        }
+
+        function renderCategorySection(category) {
+            if (!category.articles || category.articles.length === 0) return '';
+
+            let html = `<h2 class="category-title">${category.name}</h2>`;
+            html += '<div class="articles-grid">';
+            
+            category.articles.forEach(article => {
+                if (typeof article === 'object' && article.slug) {
+                    html += renderArticleCard(article);
+                }
+            });
+            
+            html += '</div>';
+            return html;
+        }
+
+        function renderReelsSection(title, reels) {
+            if (!reels || reels.length === 0) return '';
+
+            let html = `<div class="reels-section">`;
+            html += `<h2 class="section-title">${title}</h2>`;
+            html += '<div class="reels-grid">';
+            
+            reels.forEach(reel => {
+                if (typeof reel === 'object') {
+                    html += `
+                        <div class="reel-card">
+                            <h4>${reel.title}</h4>
+                            <a href="${reel.url}" target="_blank" rel="noopener">
+                                Assistir no ${reel.platform === 'tiktok' ? 'TikTok' : 'Instagram'} →
+                            </a>
+                        </div>
+                    `;
+                }
+            });
+            
+            html += '</div></div>';
+            return html;
+        }
+
+        function renderArticleSingle(article) {
+            const imageUrl = article.featuredImage?.url || '';
+            const imageAlt = article.featuredImage?.alt || article.title;
+            const createdAt = new Date(article.createdAt).toLocaleDateString('pt-BR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            
+            // Render Slate content
+            const contentHTML = renderSlateContent(article.content);
+
+            return `
+                <article class="article-single">
+                    ${imageUrl ? `<img src="${imageUrl}" alt="${imageAlt}">` : ''}
+                    <h1>${article.title}</h1>
+                    <div class="article-meta">
+                        <span>📅 ${createdAt}</span>
+                        ${article.authors?.length ? `<span>✍️ ${article.authors.map(a => a.name).join(', ')}</span>` : ''}
+                    </div>
+                    <div class="article-content">
+                        ${contentHTML}
+                    </div>
+                </article>
+            `;
+        }
+
+        // Slate Content Renderer
+        function renderSlateContent(content) {
+            if (!content || !content.root || !content.root.children) {
+                return '<p>Conteúdo não disponível.</p>';
+            }
+
+            return renderSlateNodes(content.root.children);
+        }
+
+        function renderSlateNodes(nodes) {
+            if (!Array.isArray(nodes)) return '';
+
+            return nodes.map(node => {
+                if (node.type === 'text') {
+                    let text = escapeHtml(node.text || '');
+                    if (node.bold) text = `<strong>${text}</strong>`;
+                    if (node.italic) text = `<em>${text}</em>`;
+                    if (node.underline) text = `<u>${text}</u>`;
+                    if (node.code) text = `<code>${text}</code>`;
+                    return text;
+                }
+
+                const children = node.children ? renderSlateNodes(node.children) : '';
+
+                switch (node.type) {
+                    case 'h1': return `<h2>${children}</h2>`;
+                    case 'h2': return `<h3>${children}</h3>`;
+                    case 'h3': return `<h4>${children}</h4>`;
+                    case 'h4': return `<h4>${children}</h4>`;
+                    case 'p': return `<p>${children}</p>`;
+                    case 'blockquote': return `<blockquote>${children}</blockquote>`;
+                    case 'ul': return `<ul>${children}</ul>`;
+                    case 'ol': return `<ol>${children}</ol>`;
+                    case 'li': return `<li>${children}</li>`;
+                    case 'link': 
+                        const url = node.url || '#';
+                        const newTab = node.newTab ? ' target="_blank" rel="noopener"' : '';
+                        return `<a href="${url}"${newTab}>${children}</a>`;
+                    default: return children;
+                }
+            }).join('');
+        }
+
+        // Navigation
+        function navigateToArticle(slug) {
+            window.history.pushState({ view: 'article', slug }, '', `/artigo/${slug}`);
+            loadArticle(slug);
+            window.scrollTo(0, 0);
+        }
+
+        function navigateToHome() {
+            window.history.pushState({ view: 'home' }, '', '/');
+            loadHome();
+            window.scrollTo(0, 0);
+        }
+
+        // Utilities
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
     </script>
-  </body>
+</body>
 </html>

@@ -3,21 +3,18 @@ import { authenticated } from '../access/authenticated'
 
 /**
  * Themes Collection
- * 
- * Comprehensive theme management system for application-wide visual customization.
+ * * Comprehensive theme management system for application-wide visual customization.
  * This collection enables complete control over the application's visual identity,
  * including color schemes, typography, spacing, borders, shadows, and component-specific
  * styling. Themes can be applied globally or conditionally based on user preferences,
  * device types, or content categories.
- * 
- * ## Architecture & Design Philosophy:
+ * * ## Architecture & Design Philosophy:
  * The theme system is built on a token-based design system approach, where:
  * 1. **Design Tokens**: Atomic design values (colors, font sizes, spacing units)
  * 2. **Component Tokens**: Component-specific styling built from design tokens
  * 3. **Semantic Tokens**: Contextual tokens (success, error, warning colors)
  * 4. **Theme Variants**: Different color modes (light, dark, high-contrast)
- * 
- * ## Key Features:
+ * * ## Key Features:
  * - **Color System**: Primary, secondary, accent colors with automatic shade generation
  * - **Typography**: Complete font family, size, weight, and line-height control
  * - **Spacing System**: Consistent spacing scale for margins, padding, gaps
@@ -26,31 +23,33 @@ import { authenticated } from '../access/authenticated'
  * - **Accessibility**: WCAG contrast checking and accessible color combinations
  * - **Live Preview**: Real-time theme preview in admin interface
  * - **Export/Import**: JSON export for theme backup and sharing
- * 
- * ## Use Cases:
+ * * ## Use Cases:
  * - Multi-brand support (different themes for different content sections)
  * - Seasonal theme variations (holiday themes, event-specific branding)
  * - User preference themes (light/dark mode, accessibility themes)
  * - Content category theming (sports section vs. news section)
  * - White-label applications (customizable branding per client)
- * 
- * ## Integration:
+ * * ## Integration:
  * - Frontend apps consume theme JSON via CDN
  * - Themes can be assigned to articles, sections, or user preferences
  * - CSS variables are auto-generated from theme configuration
  * - Mobile apps receive theme configuration on app launch
- * 
- * ## Access Control:
+ * * ## Access Control:
  * - Read: Public (for frontend consumption)
  * - Create/Update/Delete: Authenticated admins only
  */
 export const Themes: CollectionConfig = {
   slug: 'themes',
+  labels: {
+    singular: 'Tema',
+    plural: 'Temas',
+  },
   
   admin: {
     defaultColumns: ['name', 'isActive', 'isDefault', 'updatedAt'],
     useAsTitle: 'name',
-    description: 'Manage application themes, colors, typography, and visual styling',
+    description: 'Gerencie temas, cores, tipografia e estilos visuais da aplicação',
+    group: 'Configurações',
   },
 
   access: {
@@ -70,7 +69,7 @@ export const Themes: CollectionConfig = {
       required: true,
       unique: true,
       admin: {
-        description: 'Theme name (e.g., "Campus Default", "Dark Mode", "High Contrast")',
+        description: 'Nome do tema (ex: "Campus Padrão", "Modo Escuro", "Alto Contraste")',
       },
     },
     {
@@ -80,7 +79,7 @@ export const Themes: CollectionConfig = {
       unique: true,
       index: true,
       admin: {
-        description: 'URL-friendly identifier for API access',
+        description: 'Identificador amigável para URL (API)',
       },
       hooks: {
         beforeValidate: [
@@ -102,7 +101,7 @@ export const Themes: CollectionConfig = {
       name: 'description',
       type: 'textarea',
       admin: {
-        description: 'Description of this theme and when to use it',
+        description: 'Descrição deste tema e quando usá-lo',
       },
     },
     {
@@ -111,7 +110,7 @@ export const Themes: CollectionConfig = {
       defaultValue: true,
       admin: {
         position: 'sidebar',
-        description: 'Enable/disable this theme',
+        description: 'Ativar/desativar este tema',
       },
     },
     {
@@ -120,7 +119,7 @@ export const Themes: CollectionConfig = {
       defaultValue: false,
       admin: {
         position: 'sidebar',
-        description: 'Set as default theme (only one should be default)',
+        description: 'Definir como tema padrão (apenas um deve ser padrão)',
       },
     },
 
@@ -133,7 +132,7 @@ export const Themes: CollectionConfig = {
         {
           name: 'primary',
           type: 'group',
-          label: 'Primary Color Palette',
+          label: 'Paleta de Cores Primária',
           fields: [
             {
               name: 'main',
@@ -141,7 +140,7 @@ export const Themes: CollectionConfig = {
               required: true,
               defaultValue: '#1976d2',
               admin: {
-                description: 'Primary brand color (hex format: #1976d2)',
+                description: 'Cor principal da marca (formato hex: #1976d2)',
                 placeholder: '#1976d2',
               },
             },
@@ -149,7 +148,7 @@ export const Themes: CollectionConfig = {
               name: 'light',
               type: 'text',
               admin: {
-                description: 'Lighter variant (auto-generated if empty)',
+                description: 'Variante mais clara (auto-gerada se vazia)',
                 placeholder: '#42a5f5',
               },
             },
@@ -157,7 +156,7 @@ export const Themes: CollectionConfig = {
               name: 'dark',
               type: 'text',
               admin: {
-                description: 'Darker variant (auto-generated if empty)',
+                description: 'Variante mais escura (auto-gerada se vazia)',
                 placeholder: '#1565c0',
               },
             },
@@ -166,7 +165,7 @@ export const Themes: CollectionConfig = {
               type: 'text',
               defaultValue: '#ffffff',
               admin: {
-                description: 'Text color on primary background',
+                description: 'Cor do texto sobre fundo primário',
                 placeholder: '#ffffff',
               },
             },
@@ -177,7 +176,7 @@ export const Themes: CollectionConfig = {
         {
           name: 'secondary',
           type: 'group',
-          label: 'Secondary Color Palette',
+          label: 'Paleta de Cores Secundária',
           fields: [
             {
               name: 'main',
@@ -185,7 +184,7 @@ export const Themes: CollectionConfig = {
               required: true,
               defaultValue: '#dc004e',
               admin: {
-                description: 'Secondary brand color',
+                description: 'Cor secundária da marca',
                 placeholder: '#dc004e',
               },
             },
@@ -193,7 +192,7 @@ export const Themes: CollectionConfig = {
               name: 'light',
               type: 'text',
               admin: {
-                description: 'Lighter variant',
+                description: 'Variante mais clara',
                 placeholder: '#f50057',
               },
             },
@@ -201,7 +200,7 @@ export const Themes: CollectionConfig = {
               name: 'dark',
               type: 'text',
               admin: {
-                description: 'Darker variant',
+                description: 'Variante mais escura',
                 placeholder: '#c51162',
               },
             },
@@ -210,7 +209,7 @@ export const Themes: CollectionConfig = {
               type: 'text',
               defaultValue: '#ffffff',
               admin: {
-                description: 'Text color on secondary background',
+                description: 'Cor do texto sobre fundo secundário',
               },
             },
           ],
@@ -220,14 +219,14 @@ export const Themes: CollectionConfig = {
         {
           name: 'accent',
           type: 'group',
-          label: 'Accent Color',
+          label: 'Cor de Destaque',
           fields: [
             {
               name: 'main',
               type: 'text',
               defaultValue: '#ff9800',
               admin: {
-                description: 'Accent color for highlights and CTAs',
+                description: 'Cor de destaque para ênfases e CTAs',
               },
             },
             {
@@ -242,7 +241,7 @@ export const Themes: CollectionConfig = {
         {
           name: 'background',
           type: 'group',
-          label: 'Background Colors',
+          label: 'Cores de Fundo',
           fields: [
             {
               name: 'default',
@@ -250,7 +249,7 @@ export const Themes: CollectionConfig = {
               required: true,
               defaultValue: '#ffffff',
               admin: {
-                description: 'Default background color',
+                description: 'Cor de fundo padrão',
               },
             },
             {
@@ -258,7 +257,7 @@ export const Themes: CollectionConfig = {
               type: 'text',
               defaultValue: '#ffffff',
               admin: {
-                description: 'Background for cards and elevated surfaces',
+                description: 'Fundo para cards e superfícies elevadas',
               },
             },
             {
@@ -266,7 +265,7 @@ export const Themes: CollectionConfig = {
               type: 'text',
               defaultValue: '#f5f5f5',
               admin: {
-                description: 'Background for headers, toolbars',
+                description: 'Fundo para cabeçalhos, barras de ferramentas',
               },
             },
           ],
@@ -276,7 +275,7 @@ export const Themes: CollectionConfig = {
         {
           name: 'text',
           type: 'group',
-          label: 'Text Colors',
+          label: 'Cores de Texto',
           fields: [
             {
               name: 'primary',
@@ -284,7 +283,7 @@ export const Themes: CollectionConfig = {
               required: true,
               defaultValue: '#000000',
               admin: {
-                description: 'Primary text color',
+                description: 'Cor de texto principal',
               },
             },
             {
@@ -292,7 +291,7 @@ export const Themes: CollectionConfig = {
               type: 'text',
               defaultValue: '#757575',
               admin: {
-                description: 'Secondary/muted text color',
+                description: 'Cor de texto secundária/suave',
               },
             },
             {
@@ -300,7 +299,7 @@ export const Themes: CollectionConfig = {
               type: 'text',
               defaultValue: '#bdbdbd',
               admin: {
-                description: 'Disabled text color',
+                description: 'Cor de texto desabilitado',
               },
             },
             {
@@ -308,7 +307,7 @@ export const Themes: CollectionConfig = {
               type: 'text',
               defaultValue: '#9e9e9e',
               admin: {
-                description: 'Hint/placeholder text color',
+                description: 'Cor de texto para dicas/placeholders',
               },
             },
           ],
@@ -318,14 +317,14 @@ export const Themes: CollectionConfig = {
         {
           name: 'semantic',
           type: 'group',
-          label: 'Semantic Colors',
+          label: 'Cores Semânticas',
           fields: [
             {
               name: 'success',
               type: 'text',
               defaultValue: '#4caf50',
               admin: {
-                description: 'Success state color',
+                description: 'Cor de estado de sucesso',
               },
             },
             {
@@ -333,7 +332,7 @@ export const Themes: CollectionConfig = {
               type: 'text',
               defaultValue: '#f44336',
               admin: {
-                description: 'Error state color',
+                description: 'Cor de estado de erro',
               },
             },
             {
@@ -341,7 +340,7 @@ export const Themes: CollectionConfig = {
               type: 'text',
               defaultValue: '#ff9800',
               admin: {
-                description: 'Warning state color',
+                description: 'Cor de estado de aviso',
               },
             },
             {
@@ -349,7 +348,7 @@ export const Themes: CollectionConfig = {
               type: 'text',
               defaultValue: '#2196f3',
               admin: {
-                description: 'Info state color',
+                description: 'Cor de estado de informação',
               },
             },
           ],
@@ -361,7 +360,7 @@ export const Themes: CollectionConfig = {
           type: 'text',
           defaultValue: '#e0e0e0',
           admin: {
-            description: 'Border and divider color',
+            description: 'Cor de borda e divisor',
           },
         },
       ],
@@ -376,14 +375,14 @@ export const Themes: CollectionConfig = {
         {
           name: 'fontFamily',
           type: 'group',
-          label: 'Font Families',
+          label: 'Famílias de Fonte',
           fields: [
             {
               name: 'primary',
               type: 'text',
               defaultValue: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
               admin: {
-                description: 'Primary font family for body text',
+                description: 'Família de fonte principal para corpo de texto',
               },
             },
             {
@@ -391,7 +390,7 @@ export const Themes: CollectionConfig = {
               type: 'text',
               defaultValue: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
               admin: {
-                description: 'Font family for headings',
+                description: 'Família de fonte para cabeçalhos',
               },
             },
             {
@@ -399,7 +398,7 @@ export const Themes: CollectionConfig = {
               type: 'text',
               defaultValue: '"Fira Code", "Consolas", "Monaco", monospace',
               admin: {
-                description: 'Monospace font for code blocks',
+                description: 'Fonte monoespaçada para blocos de código',
               },
             },
           ],
@@ -409,14 +408,14 @@ export const Themes: CollectionConfig = {
         {
           name: 'fontSize',
           type: 'group',
-          label: 'Font Sizes (in pixels)',
+          label: 'Tamanhos de Fonte (em pixels)',
           fields: [
             {
               name: 'h1',
               type: 'number',
               defaultValue: 32,
               admin: {
-                description: 'Heading 1 size',
+                description: 'Tamanho do Cabeçalho 1',
               },
             },
             {
@@ -449,7 +448,7 @@ export const Themes: CollectionConfig = {
               type: 'number',
               defaultValue: 16,
               admin: {
-                description: 'Base body text size',
+                description: 'Tamanho base do corpo de texto',
               },
             },
             {
@@ -457,7 +456,7 @@ export const Themes: CollectionConfig = {
               type: 'number',
               defaultValue: 14,
               admin: {
-                description: 'Small text size',
+                description: 'Tamanho de texto pequeno',
               },
             },
             {
@@ -465,7 +464,7 @@ export const Themes: CollectionConfig = {
               type: 'number',
               defaultValue: 12,
               admin: {
-                description: 'Caption and helper text',
+                description: 'Legenda e texto de ajuda',
               },
             },
           ],
@@ -475,7 +474,7 @@ export const Themes: CollectionConfig = {
         {
           name: 'fontWeight',
           type: 'group',
-          label: 'Font Weights',
+          label: 'Pesos da Fonte',
           fields: [
             {
               name: 'light',
@@ -509,14 +508,14 @@ export const Themes: CollectionConfig = {
         {
           name: 'lineHeight',
           type: 'group',
-          label: 'Line Heights',
+          label: 'Alturas de Linha',
           fields: [
             {
               name: 'tight',
               type: 'number',
               defaultValue: 1.2,
               admin: {
-                description: 'Tight line height for headings',
+                description: 'Altura de linha justa para cabeçalhos',
               },
             },
             {
@@ -524,7 +523,7 @@ export const Themes: CollectionConfig = {
               type: 'number',
               defaultValue: 1.5,
               admin: {
-                description: 'Normal line height for body text',
+                description: 'Altura de linha normal para corpo de texto',
               },
             },
             {
@@ -532,7 +531,7 @@ export const Themes: CollectionConfig = {
               type: 'number',
               defaultValue: 1.75,
               admin: {
-                description: 'Relaxed line height for readability',
+                description: 'Altura de linha relaxada para legibilidade',
               },
             },
           ],
@@ -544,17 +543,17 @@ export const Themes: CollectionConfig = {
     {
       name: 'spacing',
       type: 'group',
-      label: 'Spacing Scale (in pixels)',
+      label: 'Escala de Espaçamento (em pixels)',
       admin: {
-        description: 'Define spacing units for consistent margins and padding',
+        description: 'Defina unidades de espaçamento para margens e preenchimentos consistentes',
       },
       fields: [
-        { name: 'xs', type: 'number', defaultValue: 4, admin: { description: 'Extra small (4px)' } },
-        { name: 'sm', type: 'number', defaultValue: 8, admin: { description: 'Small (8px)' } },
-        { name: 'md', type: 'number', defaultValue: 16, admin: { description: 'Medium (16px)' } },
-        { name: 'lg', type: 'number', defaultValue: 24, admin: { description: 'Large (24px)' } },
-        { name: 'xl', type: 'number', defaultValue: 32, admin: { description: 'Extra large (32px)' } },
-        { name: 'xxl', type: 'number', defaultValue: 48, admin: { description: '2X large (48px)' } },
+        { name: 'xs', type: 'number', defaultValue: 4, admin: { description: 'Extra pequeno (4px)' } },
+        { name: 'sm', type: 'number', defaultValue: 8, admin: { description: 'Pequeno (8px)' } },
+        { name: 'md', type: 'number', defaultValue: 16, admin: { description: 'Médio (16px)' } },
+        { name: 'lg', type: 'number', defaultValue: 24, admin: { description: 'Grande (24px)' } },
+        { name: 'xl', type: 'number', defaultValue: 32, admin: { description: 'Extra grande (32px)' } },
+        { name: 'xxl', type: 'number', defaultValue: 48, admin: { description: '2X grande (48px)' } },
       ],
     },
 
@@ -562,14 +561,14 @@ export const Themes: CollectionConfig = {
     {
       name: 'borderRadius',
       type: 'group',
-      label: 'Border Radius (in pixels)',
+      label: 'Raio da Borda (em pixels)',
       fields: [
         { name: 'none', type: 'number', defaultValue: 0 },
         { name: 'sm', type: 'number', defaultValue: 4 },
         { name: 'md', type: 'number', defaultValue: 8 },
         { name: 'lg', type: 'number', defaultValue: 12 },
         { name: 'xl', type: 'number', defaultValue: 16 },
-        { name: 'full', type: 'number', defaultValue: 9999, admin: { description: 'Fully rounded (pill shape)' } },
+        { name: 'full', type: 'number', defaultValue: 9999, admin: { description: 'Totalmente arredondado (forma de pílula)' } },
       ],
     },
 
@@ -577,14 +576,14 @@ export const Themes: CollectionConfig = {
     {
       name: 'shadows',
       type: 'group',
-      label: 'Shadow Definitions',
+      label: 'Definições de Sombra',
       fields: [
         {
           name: 'sm',
           type: 'text',
           defaultValue: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
           admin: {
-            description: 'Small shadow (subtle elevation)',
+            description: 'Sombra pequena (elevação sutil)',
           },
         },
         {
@@ -592,7 +591,7 @@ export const Themes: CollectionConfig = {
           type: 'text',
           defaultValue: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
           admin: {
-            description: 'Medium shadow (cards)',
+            description: 'Sombra média (cards)',
           },
         },
         {
@@ -600,7 +599,7 @@ export const Themes: CollectionConfig = {
           type: 'text',
           defaultValue: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
           admin: {
-            description: 'Large shadow (modals, popovers)',
+            description: 'Sombra grande (modais, popovers)',
           },
         },
         {
@@ -608,7 +607,7 @@ export const Themes: CollectionConfig = {
           type: 'text',
           defaultValue: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
           admin: {
-            description: 'Extra large shadow (overlays)',
+            description: 'Sombra extra grande (sobreposições)',
           },
         },
       ],
@@ -618,7 +617,7 @@ export const Themes: CollectionConfig = {
     {
       name: 'components',
       type: 'group',
-      label: 'Component Customization',
+      label: 'Customização de Componentes',
       fields: [
         // Button Styles
         {
@@ -630,7 +629,7 @@ export const Themes: CollectionConfig = {
               type: 'number',
               defaultValue: 8,
               admin: {
-                description: 'Button border radius',
+                description: 'Raio da borda do botão',
               },
             },
             {
@@ -638,7 +637,7 @@ export const Themes: CollectionConfig = {
               type: 'number',
               defaultValue: 16,
               admin: {
-                description: 'Horizontal padding',
+                description: 'Preenchimento horizontal',
               },
             },
             {
@@ -646,7 +645,7 @@ export const Themes: CollectionConfig = {
               type: 'number',
               defaultValue: 8,
               admin: {
-                description: 'Vertical padding',
+                description: 'Preenchimento vertical',
               },
             },
           ],
@@ -671,10 +670,10 @@ export const Themes: CollectionConfig = {
               name: 'shadow',
               type: 'select',
               options: [
-                { label: 'None', value: 'none' },
-                { label: 'Small', value: 'sm' },
-                { label: 'Medium', value: 'md' },
-                { label: 'Large', value: 'lg' },
+                { label: 'Nenhuma', value: 'none' },
+                { label: 'Pequena', value: 'sm' },
+                { label: 'Média', value: 'md' },
+                { label: 'Grande', value: 'lg' },
               ],
               defaultValue: 'md',
             },
@@ -712,7 +711,7 @@ export const Themes: CollectionConfig = {
       type: 'code',
       admin: {
         language: 'css',
-        description: 'Additional custom CSS to inject (advanced users only)',
+        description: 'CSS personalizado adicional para injetar (apenas usuários avançados)',
       },
     },
 
@@ -729,21 +728,21 @@ export const Themes: CollectionConfig = {
           type: 'text',
           defaultValue: '1.0.0',
           admin: {
-            description: 'Theme version for tracking changes',
+            description: 'Versão do tema para rastrear mudanças',
           },
         },
         {
           name: 'author',
           type: 'text',
           admin: {
-            description: 'Theme author/creator',
+            description: 'Autor/criador do tema',
           },
         },
         {
           name: 'tags',
           type: 'text',
           admin: {
-            description: 'Comma-separated tags (e.g., "dark, minimal, corporate")',
+            description: 'Tags separadas por vírgula (ex: "escuro, minimalista, corporativo")',
           },
         },
       ],
@@ -781,7 +780,7 @@ export const Themes: CollectionConfig = {
     ],
     afterChange: [
       async ({ doc }) => {
-        console.log(`Theme "${doc.name}" updated - frontend should reload theme configuration`)
+        console.log(`Tema "${doc.name}" atualizado - frontend deve recarregar a configuração do tema`)
         // TODO: Invalidate theme cache, trigger CDN update
       },
     ],

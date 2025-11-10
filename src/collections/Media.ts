@@ -7,7 +7,7 @@ import {
 } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { fileURLToPath } from 'url'
-
+import { slateEditor } from '@payloadcms/richtext-slate'
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
 
@@ -16,7 +16,13 @@ const dirname = path.dirname(filename)
 
 export const Media: CollectionConfig = {
   slug: 'media',
-  folders: true,
+  labels: {
+    singular: 'Mídia',
+    plural: 'Mídias',
+  },
+  admin: {
+    group: 'Conteúdo',
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -32,50 +38,17 @@ export const Media: CollectionConfig = {
     {
       name: 'caption',
       type: 'richText',
-      editor: lexicalEditor({
-        features: ({ rootFeatures }) => {
-          return [...rootFeatures, FixedToolbarFeature(), InlineToolbarFeature()]
+      editor: slateEditor({
+        admin: {
+          elements: ['link'],
+          leaves: ['bold', 'italic'],
         },
       }),
     },
   ],
   upload: {
     // Upload to the public/media directory in Next.js making them publicly accessible even outside of Payload
-    staticDir: path.resolve(dirname, '../../public/media'),
-    adminThumbnail: 'thumbnail',
-    focalPoint: true,
-    imageSizes: [
-      {
-        name: 'thumbnail',
-        width: 300,
-      },
-      {
-        name: 'square',
-        width: 500,
-        height: 500,
-      },
-      {
-        name: 'small',
-        width: 600,
-      },
-      {
-        name: 'medium',
-        width: 900,
-      },
-      {
-        name: 'large',
-        width: 1400,
-      },
-      {
-        name: 'xlarge',
-        width: 1920,
-      },
-      {
-        name: 'og',
-        width: 1200,
-        height: 630,
-        crop: 'center',
-      },
-    ],
+    mimeTypes: ['image/png', 'image/jpeg', 'image/webp', 'image/svg+xml', 'image/gif'],
   },
 }
+

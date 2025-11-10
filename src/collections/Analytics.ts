@@ -2,64 +2,70 @@ import type { CollectionConfig } from 'payload'
 import { authenticated } from '../access/authenticated'
 
 /**
- * Analytics Collection
+ * Coleção de Análises
  * 
- * Comprehensive analytics tracking for articles, posts, and user interactions.
- * This collection stores detailed metrics including page views, user engagement,
- * time spent on content, device information, geographic data, and more.
+ * Rastreamento abrangente de análises para artigos, postagens e interações de usuários.
+ * Esta coleção armazena métricas detalhadas, incluindo visualizações de página,
+ * engajamento do usuário, tempo gasto no conteúdo, informações do dispositivo,
+ * dados geográficos e muito mais.
  * 
- * ## Key Features:
- * - Article/Post view tracking with unique user identification
- * - Session-based analytics with device and browser information
- * - Geographic tracking (country, city, region)
- * - Engagement metrics (time spent, scroll depth, interactions)
- * - Referrer and traffic source tracking
- * - Real-time data aggregation support
+ * ## Principais Funcionalidades:
+ * - Rastreamento de visualizações de artigos/postagens com identificação única de usuário
+ * - Análises baseadas em sessão com informações de dispositivo e navegador
+ * - Rastreamento geográfico (país, cidade, região)
+ * - Métricas de engajamento (tempo gasto, profundidade de rolagem, interações)
+ * - Rastreamento de origem de tráfego e referência
+ * - Suporte a agregação de dados em tempo real
  * 
- * ## Access Control:
- * - Read: Authenticated users only (admins, editors)
- * - Create: Public API access (for tracking events from frontend)
- * - Update/Delete: Authenticated users only
+ * ## Controle de Acesso:
+ * - Leitura: Apenas usuários autenticados (administradores, editores)
+ * - Criação: Acesso público via API (para rastrear eventos do front-end)
+ * - Atualização/Exclusão: Apenas usuários autenticados
  * 
- * ## Use Cases:
- * - Track article performance and popularity
- * - Analyze user behavior and engagement patterns
- * - Generate content performance reports
- * - Identify trending topics and high-performing content
- * - Monitor traffic sources and referrals
+ * ## Casos de Uso:
+ * - Rastrear desempenho e popularidade de conteúdos
+ * - Analisar o comportamento e o engajamento dos usuários
+ * - Gerar relatórios de desempenho de conteúdo
+ * - Identificar tópicos em alta e conteúdos de alto desempenho
+ * - Monitorar fontes de tráfego e referências
  */
 export const Analytics: CollectionConfig = {
   slug: 'analytics',
+  labels: {
+    singular: 'Análise',
+    plural: 'Análises',
+  },
   
   admin: {
     defaultColumns: ['contentType', 'contentId', 'eventType', 'createdAt'],
     useAsTitle: 'id',
-    description: 'Analytics and tracking data for content performance and user engagement',
+    description: 'Dados de análise e rastreamento de desempenho de conteúdo e engajamento de usuários',
+    group: 'Configurações',
   },
 
   access: {
-    // Public can create analytics events (tracked from frontend)
+    // O público pode criar eventos de análise (rastreados a partir do front-end)
     create: () => true,
-    // Only authenticated users can read/update/delete
+    // Apenas usuários autenticados podem ler/atualizar/excluir
     read: authenticated,
     update: authenticated,
     delete: authenticated,
   },
 
   fields: [
-    // Content Reference
+    // Referência do Conteúdo
     {
       name: 'contentType',
       type: 'select',
       required: true,
       options: [
-        { label: 'Article', value: 'article' },
-        { label: 'Post', value: 'post' },
-        { label: 'Media', value: 'media' },
-        { label: 'Page', value: 'page' },
+        { label: 'Artigo', value: 'article' },
+        { label: 'Postagem', value: 'post' },
+        { label: 'Mídia', value: 'media' },
+        { label: 'Página', value: 'page' },
       ],
       admin: {
-        description: 'Type of content being tracked',
+        description: 'Tipo de conteúdo que está sendo rastreado',
       },
     },
     {
@@ -68,45 +74,45 @@ export const Analytics: CollectionConfig = {
       required: true,
       index: true,
       admin: {
-        description: 'ID of the content item (article, post, etc.)',
+        description: 'ID do item de conteúdo (artigo, postagem, etc.)',
       },
     },
     {
       name: 'contentTitle',
       type: 'text',
       admin: {
-        description: 'Title of the content for easier reference',
+        description: 'Título do conteúdo para referência',
         readOnly: true,
       },
     },
 
-    // Event Information
+    // Informações do Evento
     {
       name: 'eventType',
       type: 'select',
       required: true,
       options: [
-        { label: 'Page View', value: 'page_view' },
-        { label: 'Content Read', value: 'content_read' },
-        { label: 'Video Play', value: 'video_play' },
-        { label: 'Video Complete', value: 'video_complete' },
-        { label: 'Share', value: 'share' },
-        { label: 'Like', value: 'like' },
-        { label: 'Comment', value: 'comment' },
+        { label: 'Visualização de Página', value: 'page_view' },
+        { label: 'Leitura de Conteúdo', value: 'content_read' },
+        { label: 'Reprodução de Vídeo', value: 'video_play' },
+        { label: 'Vídeo Concluído', value: 'video_complete' },
+        { label: 'Compartilhamento', value: 'share' },
+        { label: 'Curtida', value: 'like' },
+        { label: 'Comentário', value: 'comment' },
         { label: 'Download', value: 'download' },
       ],
       admin: {
-        description: 'Type of analytics event',
+        description: 'Tipo de evento analítico registrado',
       },
     },
 
-    // User Information
+    // Informações do Usuário
     {
       name: 'userId',
       type: 'text',
       index: true,
       admin: {
-        description: 'Unique user identifier (anonymous or authenticated)',
+        description: 'Identificador único do usuário (anônimo ou autenticado)',
       },
     },
     {
@@ -114,7 +120,7 @@ export const Analytics: CollectionConfig = {
       type: 'text',
       index: true,
       admin: {
-        description: 'Session identifier for grouping user activity',
+        description: 'Identificador da sessão para agrupar atividades do usuário',
       },
     },
     {
@@ -122,11 +128,11 @@ export const Analytics: CollectionConfig = {
       type: 'checkbox',
       defaultValue: false,
       admin: {
-        description: 'Whether the user was logged in',
+        description: 'Indica se o usuário estava logado',
       },
     },
 
-    // Device & Browser Information
+    // Informações do Dispositivo e Navegador
     {
       name: 'deviceInfo',
       type: 'group',
@@ -136,16 +142,16 @@ export const Analytics: CollectionConfig = {
           type: 'select',
           options: [
             { label: 'Desktop', value: 'desktop' },
-            { label: 'Mobile', value: 'mobile' },
+            { label: 'Celular', value: 'mobile' },
             { label: 'Tablet', value: 'tablet' },
-            { label: 'Other', value: 'other' },
+            { label: 'Outro', value: 'other' },
           ],
         },
         {
           name: 'os',
           type: 'text',
           admin: {
-            description: 'Operating system (e.g., iOS, Android, Windows)',
+            description: 'Sistema operacional (ex: iOS, Android, Windows)',
           },
         },
         {
@@ -156,7 +162,7 @@ export const Analytics: CollectionConfig = {
           name: 'browser',
           type: 'text',
           admin: {
-            description: 'Browser name (e.g., Chrome, Safari, Firefox)',
+            description: 'Nome do navegador (ex: Chrome, Safari, Firefox)',
           },
         },
         {
@@ -167,13 +173,13 @@ export const Analytics: CollectionConfig = {
           name: 'screenResolution',
           type: 'text',
           admin: {
-            description: 'Screen resolution (e.g., 1920x1080)',
+            description: 'Resolução da tela (ex: 1920x1080)',
           },
         },
       ],
     },
 
-    // Geographic Information
+    // Informações Geográficas
     {
       name: 'geoLocation',
       type: 'group',
@@ -187,14 +193,14 @@ export const Analytics: CollectionConfig = {
           name: 'countryCode',
           type: 'text',
           admin: {
-            description: 'ISO country code (e.g., US, BR, UK)',
+            description: 'Código ISO do país (ex: BR, US, UK)',
           },
         },
         {
           name: 'region',
           type: 'text',
           admin: {
-            description: 'State or region',
+            description: 'Estado ou região',
           },
         },
         {
@@ -212,7 +218,7 @@ export const Analytics: CollectionConfig = {
       ],
     },
 
-    // Engagement Metrics
+    // Métricas de Engajamento
     {
       name: 'engagementMetrics',
       type: 'group',
@@ -221,14 +227,14 @@ export const Analytics: CollectionConfig = {
           name: 'timeSpent',
           type: 'number',
           admin: {
-            description: 'Time spent on content in seconds',
+            description: 'Tempo gasto no conteúdo (em segundos)',
           },
         },
         {
           name: 'scrollDepth',
           type: 'number',
           admin: {
-            description: 'Percentage of content scrolled (0-100)',
+            description: 'Percentual de rolagem do conteúdo (0–100)',
           },
         },
         {
@@ -236,7 +242,7 @@ export const Analytics: CollectionConfig = {
           type: 'number',
           defaultValue: 0,
           admin: {
-            description: 'Number of clicks/interactions',
+            description: 'Número de cliques/interações',
           },
         },
         {
@@ -244,13 +250,13 @@ export const Analytics: CollectionConfig = {
           type: 'checkbox',
           defaultValue: false,
           admin: {
-            description: 'User left without interaction',
+            description: 'Usuário saiu sem interação',
           },
         },
       ],
     },
 
-    // Traffic Source
+    // Fonte de Tráfego
     {
       name: 'trafficSource',
       type: 'group',
@@ -259,75 +265,75 @@ export const Analytics: CollectionConfig = {
           name: 'referrer',
           type: 'text',
           admin: {
-            description: 'Referring URL',
+            description: 'URL de referência',
           },
         },
         {
           name: 'source',
           type: 'select',
           options: [
-            { label: 'Direct', value: 'direct' },
-            { label: 'Search', value: 'search' },
-            { label: 'Social Media', value: 'social' },
-            { label: 'Email', value: 'email' },
-            { label: 'Referral', value: 'referral' },
-            { label: 'Other', value: 'other' },
+            { label: 'Direto', value: 'direct' },
+            { label: 'Busca', value: 'search' },
+            { label: 'Mídia Social', value: 'social' },
+            { label: 'E-mail', value: 'email' },
+            { label: 'Referência', value: 'referral' },
+            { label: 'Outro', value: 'other' },
           ],
         },
         {
           name: 'medium',
           type: 'text',
           admin: {
-            description: 'Marketing medium (e.g., cpc, organic, email)',
+            description: 'Meio de marketing (ex: cpc, orgânico, e-mail)',
           },
         },
         {
           name: 'campaign',
           type: 'text',
           admin: {
-            description: 'Campaign name for tracking',
+            description: 'Nome da campanha para rastreamento',
           },
         },
         {
           name: 'utmParams',
           type: 'json',
           admin: {
-            description: 'Full UTM parameters as JSON',
+            description: 'Parâmetros UTM completos em formato JSON',
           },
         },
       ],
     },
 
-    // Additional Metadata
+    // Metadados Adicionais
     {
       name: 'ipAddress',
       type: 'text',
       admin: {
-        description: 'User IP address (anonymized for privacy)',
+        description: 'Endereço IP do usuário (anonimizado por privacidade)',
       },
     },
     {
       name: 'userAgent',
       type: 'text',
       admin: {
-        description: 'Full user agent string',
+        description: 'String completa do agente do usuário',
       },
     },
     {
       name: 'metadata',
       type: 'json',
       admin: {
-        description: 'Additional custom metadata as JSON',
+        description: 'Metadados adicionais personalizados em formato JSON',
       },
     },
   ],
 
-  // Timestamps are automatically added by Payload
+  // Timestamps são adicionados automaticamente pelo Payload
   timestamps: true,
 
-  // Indexes for performance
-  // Note: Additional database indexes should be created for:
-  // - contentId + createdAt (for time-series queries)
-  // - userId + createdAt (for user activity tracking)
-  // - sessionId (for session analysis)
+  // Índices para performance
+  // Observação: índices adicionais devem ser criados para:
+  // - contentId + createdAt (para consultas temporais)
+  // - userId + createdAt (para rastreamento de atividades do usuário)
+  // - sessionId (para análise de sessões)
 }

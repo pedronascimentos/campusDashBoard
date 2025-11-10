@@ -3,13 +3,16 @@ import { authenticated } from '../access/authenticated'
 
 export const Categories: CollectionConfig = {
   slug: 'categories',
+  labels: {
+    singular: 'Categoria',
+    plural: 'Categorias',
+  },
   
   admin: {
     // Hide from sidebar - only accessible via inline creation in Articles
     hidden: true,
     useAsTitle: 'name',
     defaultColumns: ['name', 'slug', 'color'],
-    group: 'Conteúdo', // Adicione um grupo para organização
   },
 
   access: {
@@ -26,7 +29,7 @@ export const Categories: CollectionConfig = {
       required: true,
       unique: true,
       admin: {
-        description: 'Category name (e.g., "Sports", "Technology", "Culture")',
+        description: 'Nome da categoria (ex: "Esportes", "Tecnologia", "Cultura")',
       },
     },
     {
@@ -35,7 +38,7 @@ export const Categories: CollectionConfig = {
       required: true,
       unique: true,
       admin: {
-        description: 'URL-friendly identifier',
+        description: 'Identificador amigável para URL',
       },
       hooks: {
         beforeValidate: [
@@ -58,17 +61,17 @@ export const Categories: CollectionConfig = {
       type: 'select',
       defaultValue: 'gray',
       options: [
-        { label: '🔴 Red', value: 'red' },
-        { label: '🟠 Orange', value: 'orange' },
-        { label: '🟡 Yellow', value: 'yellow' },
-        { label: '🟢 Green', value: 'green' },
-        { label: '🔵 Blue', value: 'blue' },
-        { label: '🟣 Purple', value: 'purple' },
-        { label: '🟤 Brown', value: 'brown' },
-        { label: '⚫ Gray', value: 'gray' },
+        { label: '🔴 Vermelho', value: 'red' },
+        { label: '🟠 Laranja', value: 'orange' },
+        { label: '🟡 Amarelo', value: 'yellow' },
+        { label: '🟢 Verde', value: 'green' },
+        { label: '🔵 Azul', value: 'blue' },
+        { label: '🟣 Roxo', value: 'purple' },
+        { label: '🟤 Marrom', value: 'brown' },
+        { label: '⚫ Cinza', value: 'gray' },
       ],
       admin: {
-        description: 'Color for visual organization',
+        description: 'Cor para organização visual',
       },
     },
     {
@@ -76,7 +79,7 @@ export const Categories: CollectionConfig = {
       type: 'textarea',
       maxLength: 200,
       admin: {
-        description: 'Optional description (max 200 characters)',
+        description: 'Descrição opcional (máx 200 caracteres)',
       },
     },
     {
